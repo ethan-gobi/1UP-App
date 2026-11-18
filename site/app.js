@@ -48,8 +48,13 @@ function marketAct(action, data) {
 }
 async function api(action, data = {}) {
   await new Promise(r => setTimeout(r, 120)); // feel like a network round trip
-  try { return {ok: true, body: marketAct(action, data)}; }
-  catch (e) { return {ok: false, body: {error: e.message}}; }
+  const run = () => {
+    try { return {ok: true, body: marketAct(action, data)}; }
+    catch (e) { return {ok: false, body: {error: e.message}}; }
+  };
+  // Web Locks serialize the read-check-write across tabs, like the server's lock,
+  // so two tabs can't both take the last packet.
+  return navigator.locks ? navigator.locks.request(KEY, run) : run();
 }
 function resetDemo() {
   localStorage.removeItem(KEY);
