@@ -1,5 +1,13 @@
 # Fold-out Garden Market
 
+## Revised folding stall with raised storage
+
+![Counter and support panels folding before the stall rises](fold-lift/sequence.png)
+
+Play frames 1 to 110 in the [animated Blender model](fold-lift/fold-lift.blend). The sales counter folds up, both supports turn inward, and the carriage lifts the stocked unit along two guides. Its lowest moving part parks 2.19 m above the floor, just over 7 ft. The stationary frame reaches about 3.95 m (13 ft). Seven feet is the proposed storage clearance. Site flood elevation, overhead space, heritage-compatible anchoring, lift capacity, guarding and a mechanical parking lock require engineering and site review before installation. The lift is a separate cost from the original cabinet estimate.
+
+## Earlier cabinet concepts
+
 Each Blender scene shows the same stall stored on the left and ready for customers on the right. Open a .blend file to inspect the parts or use a PNG directly in the slides.
 
 | Design | How it opens | Main tradeoff |
@@ -15,3 +23,4 @@ Each Blender scene shows the same stall stored on the left and ready for custome
 ![Bookcase stall in storage and trading positions](bookcase.png)
 
 These are concept models. A physical trial should check setup time, stability, customer reach and the space left for the aisle. Compare the drop-front cabinet with a folding table and bins using the same stock.
+
