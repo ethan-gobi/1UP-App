@@ -4,7 +4,7 @@
 
 ![Trading, folding and transport layouts](portable/portable-market.png)
 
-The [editable Blender scene](portable/portable-market.blend) pairs a 5 ft square pop-up canopy with a locking stock trolley. Its lid is the sales counter. During an early preparation notice, staff can stow the trays, pack the canopy and roll the kit to a designated dry location while conditions allow. An evacuation instruction ends packing immediately. The seven-foot goal applies to the storage elevation. Confirm the destination and a step-free route before trialling the kit. Include the fabric, ballast, stock and case when weighing the kit and timing a two-person drill. The canopy mechanism is based on a [commercial 5 ft frame with roller bag](https://www.eurmax.com/products/standard-5x5-canopy-frame-with-heavy-duty-roller-bag).
+The [editable Blender scene](portable/portable-market.blend) pairs a 5 ft square pop-up canopy with a locking stock trolley. Its lid is the sales counter. During an early preparation notice, staff can stow the trays, pack the canopy and roll the kit to a designated dry location while conditions allow. An evacuation instruction ends packing immediately. The counter stays at everyday working height, about 80 cm. Choose a dry storage location and a clear, step-free route before the trial. Include the fabric, ballast, stock and case when weighing the kit and timing a two-person drill. The canopy mechanism is based on a [commercial 5 ft frame with roller bag](https://www.eurmax.com/products/standard-5x5-canopy-frame-with-heavy-duty-roller-bag).
 
 ## Earlier fixed-lift concept
 
@@ -29,5 +29,6 @@ Each Blender scene shows the same stall stored on the left and ready for custome
 ![Bookcase stall in storage and trading positions](bookcase.png)
 
 These are concept models. A physical trial should check setup time, stability, customer reach and the space left for the aisle. Compare the drop-front cabinet with a folding table and bins using the same stock.
+
 
 
