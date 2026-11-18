@@ -1,5 +1,7 @@
 # Yellow Zone Solution: The Simple Version
 
+[Compare the proposed Fold-Out Garden Market pilot and updated financial plan](FOLD-OUT-PILOT.md). The team is reviewing the two scopes.
+
 **Foldable shelves + a flood warning app + a practised drill = no Garden Market stock lost to the next flood.**
 
 ```mermaid

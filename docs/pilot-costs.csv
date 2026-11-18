@@ -1,0 +1,24 @@
+Category,Item,Unit CAD,Qty or tax base,Amount CAD,Basis
+Materials & Equipment,"Cabinet shell, washable trays, hinged panel and finish; allowance per unit",1850.0,2.0,3700,Fabrication allowance; materials only
+Materials & Equipment,"Folding legs, locking braces, stays, latches, brakes and anti-tip hardware",650.0,2.0,1300,Hardware allowance per unit
+Materials & Equipment,Seed packets and books for the reserve unit; opening stock allowance,1500.0,1.0,1500,Rotate and replenish from sales
+Materials & Equipment,Payment reader for each stall,69.0,2.0,138,https://squareup.com/ca/en/hardware/reader
+Research & Data Collection,"Design review, stability, supported loads and accessible host layout",150.0,24.0,3600,"Professional review allowance, CAD/hour"
+Research & Data Collection,Paid prototype and pickup trials,30.0,16.0,480,Participant honoraria; CAD/session
+Research & Data Collection,"Mock-up, test weights and measuring supplies",550.0,1.0,550,Prototype supplies allowance
+Marketing & Outreach,"Large-print signs, QR cards and printed pickup sheets",475.0,1.0,475,Local printing allowance
+Staffing & Personnel,"Fabricate two units, including the first prototype",72.0,100.0,7200,Toronto carpenter wage $36/h x 2 for shop overhead; Job Bank
+Staffing & Personnel,"Coordinate host, stock rotation and four practice sessions",55.0,80.0,4400,"Contract allowance, CAD/hour"
+Staffing & Personnel,"Open, staff and close backup stall for 12 market days",32.0,96.0,3072,8 paid hours per day; CAD/hour
+Travel & Fieldwork,Dry cabinet storage and access retainer at proposed host,275.0,12.0,3300,Planning allowance only; church storage price unpublished.
+Travel & Fieldwork,Copp Hall hire: 12 days x 8 billable hours at the 2024 rate for up to 30 people,100.0,96.0,9600,Rosedale 2024 fee schedule; request current quote
+Travel & Fieldwork,Van deliveries and stock rotation,180.0,12.0,2160,Budget per local round trip
+Miscellaneous/Admin,Liability premium and host agreement review,2000.0,1.0,2000,Combined annual allowance; obtain written terms
+Technology & Software,"Paid accessibility, privacy and code review of team-built app",96.16,28.0,2692.48,Toronto developer wage $48.08/h x 2; Job Bank
+Technology & Software,App maintenance and handover,96.16,24.0,2307.84,Contract allowance based on developer benchmark
+Technology & Software,"Database, hosting, domain, optional push and AI usage",95.0,12.0,1140,CAD monthly envelope; Supabase Pro starts at US$25/month
+Staffing & Personnel,"Stall hinge, brake and brace inspection",72.0,12.0,864,6 shop hours per unit per year
+Miscellaneous/Admin,Payment-processing fees on pilot sales,300.0,1.0,300,Planning allowance; actual cost depends on sales mix
+Miscellaneous/Admin,HST allowance on cash items except honoraria; actual tax depends on invoices.,0.13,50299.32,6538.91,Canada Revenue Agency; conservative reserve
+,Contingency,,,4012.28,7% after tax allowance
+,Pilot total,,,61330.51,CAD

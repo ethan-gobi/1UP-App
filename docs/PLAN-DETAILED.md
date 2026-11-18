@@ -1,5 +1,7 @@
 # Yellow Zone Solution Plan: Foldable Shelves + Flood Warning App (Detailed)
 
+[Compare the proposed Fold-Out Garden Market pilot and updated financial plan](FOLD-OUT-PILOT.md). The team is reviewing the two scopes.
+
 Our solution protects Garden Market stock from floods with foldable, latched shelves that keep reserve stock high every day. A warning app makes sure staff and vendors finish folding and loading before the water comes. A drill-tested pilot proves it works, for $100,000 over 12 months.
 
 Short version: [PLAN-SIMPLE.md](PLAN-SIMPLE.md)
