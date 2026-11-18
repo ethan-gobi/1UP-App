@@ -1,46 +1,63 @@
-# Timeline: Fold-Out Market pilot
+# Timeline: the whole Yellow Zone project
 
-**Assumed start: January 2027.** If the pilot starts later, shift every date by the same amount. The goal is for the carts, the trained staff and the pickup website to be ready **before spring flood season** (snowmelt and spring storms, March to April). Pickups then run through the summer storm months. The July 2024 flood is the one we are planning for.
+This runs from the first research in October 2026 to the end of year two in 2028. **Dates after today (18 Nov 2026) are planned, not booked.**
+- The **judges' pitch is assumed for mid-December 2026.**
+- The **pilot is assumed to start in January 2027.** If either date moves, shift everything after it by the same amount.
+- The pilot has to be ready **before spring flood season** (snowmelt and spring storms, March to April), and it then runs through the summer storm months. The July 2024 flood is the one we are planning for.
+
+## The whole project at a glance
 
 ```mermaid
 gantt
-    title Fold-Out Market pilot, 2027 (CAD $100,000)
+    title Yellow Zone: Fold-Out Market, Oct 2026 to Dec 2028
     dateFormat YYYY-MM-DD
-    axisFormat %b
+    axisFormat %b %Y
     todayMarker off
 
-    section Approvals
-    Evergreen sign-off and vendor briefing     :a1, 2027-01-04, 3w
-    Copp Hall quote, host agreement, insurance :a2, 2027-01-04, 5w
-    Host agreement signed                      :milestone, m1, after a2, 0d
+    section 1. Research (done)
+    Site, flood history and 8 solution ideas  :done, r1, 2026-10-15, 2026-10-29
+    Flood simulation and personas             :done, r2, 2026-10-29, 2026-11-05
+    First $100K budget                        :done, r3, 2026-11-05, 2026-11-12
+    Pick the fold-out pickup pilot            :milestone, done, m0, 2026-11-18, 0d
 
-    section Cart and canopy
-    Final cart design and safety review        :d1, 2027-01-11, 4w
-    Build and test the prototype cart          :d2, after d1, 3w
-    Build cart 2, buy canopies, stock, readers :d3, after d2, 3w
-    Carts ready                                :milestone, m2, after d3, 0d
+    section 2. Design and pitch
+    Plans, repo, research summary             :active, p1, 2026-11-18, 2026-11-25
+    Cart and canopy renders (Hogan, Codex)    :active, p2, 2026-11-18, 2026-12-02
+    Working demo website                      :active, p3, 2026-11-18, 2026-12-02
+    Budget and timeline                       :active, p4, 2026-11-18, 2026-11-25
+    Pitch deck and rehearsal                  :p5, 2026-11-25, 2026-12-11
+    Pitch to judges                           :milestone, m1, 2026-12-14, 0d
 
-    section Website ($100)
-    Outage fixes and approval records          :w1, 2027-01-04, 6w
-    Accessibility check with real users        :w2, after w1, 2w
-    Domain and free hosting live               :milestone, m3, after w2, 0d
+    section 3. Pilot set-up (2027)
+    Approvals, Copp Hall deal, insurance      :a1, 2027-01-04, 5w
+    Build and test the carts                  :a2, 2027-01-11, 10w
+    Website finished ($100)                   :a3, 2027-01-04, 8w
+    Drills and training                       :a4, 2027-03-15, 5w
+    Ready for flood season                    :milestone, m2, 2027-04-19, 0d
 
-    section Drills and training
-    Staff and vendor training                  :t1, 2027-03-15, 2w
-    4 timed drills vs a folding table and bins :t2, after t1, 3w
-    Signs, QR cards and flyers at both sites   :t3, 2027-03-22, 3w
-    Ready for flood season                     :milestone, m4, 2027-04-19, 0d
+    section 4. Pilot season (2027)
+    12 pickup days at Copp Hall               :b1, 2027-04-24, 2027-10-30
+    Year-one review                           :b2, 2027-11-01, 4w
+    Go / no-go for year two                   :milestone, m3, 2027-12-03, 0d
 
-    section Pickup season
-    12 market days at Copp Hall                :s1, 2027-04-24, 2027-10-30
-    Monthly cart inspections                   :s2, 2027-04-24, 2027-10-30
-
-    section Review
-    Year-one review: sales, drill times, cost  :r1, 2027-11-01, 4w
-    Decide on the $29,783.89 year-two reserve  :milestone, m5, 2027-12-03, 0d
+    section 5. Year two (2028)
+    Fixes from the review, refresher drills   :c1, 2028-01-10, 2028-04-15
+    Second season (reserve $29,783.89)        :c2, 2028-04-22, 2028-10-28
+    Handover to Evergreen                     :c3, 2028-11-01, 2028-12-15
+    Project ends                              :milestone, m4, 2028-12-15, 0d
 ```
 
-## Phases
+## Stages
+
+| Stage | When | What happens | Who |
+| --- | --- | --- | --- |
+| 1. Research | Oct to mid-Nov 2026 (done) | Studied the Brick Works floods and wrote 8 ideas, dropping the ones Evergreen already does. Built the flood simulation and personas, drafted the first $100K budget, then picked the fold-out pickup pilot on 18 Nov. | Team, Claude |
+| 2. Design and pitch | 18 Nov to mid-Dec 2026 | Unified plan, repo and research summary. Hogan's push-bar cart and canopy renders. The working demo website. The $100K budget and this timeline. Then the deck and rehearsals before the judges. | Gopi, Hogan, Codex, Claude |
+| 3. Pilot set-up | Jan to mid-Apr 2027 | See the pilot detail below. | Team with Evergreen |
+| 4. Pilot season | Late Apr to Dec 2027 | See the pilot detail below. | Team with Evergreen and vendors |
+| 5. Year two | 2028 (only if December 2027 says go) | Apply fixes from the review, run refresher drills before spring, then a second season paid from the $29,783.89 reserve. Hand the carts, website and checklists to Evergreen by December 2028. | Evergreen, with the team handing over |
+
+## Pilot detail (2027)
 
 | Phase | When | What gets done | Money (see [BUDGET.md](BUDGET.md)) |
 | --- | --- | --- | --- |
@@ -53,7 +70,8 @@ gantt
 
 ## Checkpoints that can stop or change the plan
 
-- **End of January:** no written answer from the church means we look for a second host before building anything.
+- **Mid-December 2026, the pitch:** the judges' feedback goes into the plan before any money is spent.
+- **End of January 2027:** no written answer from the church means we look for a second host before building anything.
 - **Mid-March:** if the prototype fails its stability or doorway test, fix it before drills start, or use the folding table and bins for this season.
 - **Mid-April:** if the cart isn't faster or safer than a folding table and bins in the drills, build no more and run the season with the cheaper setup.
-- **December:** the reserve is released only if the stall was used and the drills passed.
+- **December 2027:** the reserve is released only if the stall was used and the drills passed.
