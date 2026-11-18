@@ -8,7 +8,7 @@ import threading
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).parent
-FILES = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "text/javascript"), "/style.css": ("style.css", "text/css")}
+FILES = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "text/javascript"), "/style.css": ("style.css", "text/css"), **{f"/fonts/{n}": (f"fonts/{n}", "font/woff2") for n in ("fraunces.woff2", "instrument-sans-400.woff2", "instrument-sans-600.woff2", "instrument-sans-700.woff2")}}
 
 
 class Market:
