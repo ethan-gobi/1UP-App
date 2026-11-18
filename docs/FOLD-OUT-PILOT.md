@@ -1,5 +1,5 @@
 # Fold-Out Garden Market
-## Scope proposal for the team
+## Fold-out pickup pilot chosen for the competition
 
 Can a vendor complete a pickup safely when the Yellow Zone Garden Market is closed? A small reserve of seeds and books would stay year-round at a host outside the mapped river floodplain. The same cabinet holds the goods and opens into a selling counter. One cabinet serves the Garden Market on ordinary days and a second lives at the host. A flood closure never requires a trip back into the market.
 
@@ -33,4 +33,4 @@ Copp Hall at Rosedale United Church has hosted vendor markets and offers lift ac
 
 [First-year financial plan and assumptions](FINANCIAL-PLAN.md) · [Line-item cost schedule](pilot-costs.csv)
 
-The earlier [shelf proposal](PLAN-DETAILED.md) remains available for comparison. The team leads decide which design to submit after reviewing the host dependency, cost and drill evidence.
+The team selected the fold-out pilot in the [scope discussion](https://github.com/ethan-gobi/1UP-App/issues/1#issuecomment-6994222972). Until a host signs a standby agreement, advertise pickups only at confirmed sessions. Obtain a written quote for same-day access, weekend custodial fees, room hire and storage before committing funds.
