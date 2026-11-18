@@ -6,7 +6,7 @@
 
 - The Evergreen Brick Works has flooded **three times in about a dozen years** (2013, July 16, 2024, Sept 2, 2026). Its flood design protects the buildings, **not the stock on the ground floor**.
 - The team's chosen solution is the **Fold-Out Garden Market**. A small reserve of stock lives in a cabinet at a dry host outside the floodplain, and during a closure the cabinet folds open into a counter so customers can still pick up reserved orders.
-- **First-year cost: CAD $61,330.51** ($72,937.87 if the hall charges the higher rate). **Year two: about $35,238**, and nobody has agreed to pay for it yet.
+- **Budget: CAD $100,000, website capped at $100.** Year one costs **$70,116.11** (hall at the higher $200/h rate, 10% contingency), the website $100, and **$29,783.89** is held as a year-two reserve. See [BUDGET.md](BUDGET.md). (The earlier $61,330.51 plan is superseded.)
 - **Biggest unknown:** the proposed host, Copp Hall, has not agreed to anything, and its current prices are not published.
 
 ## 2. The site and its floods
@@ -56,6 +56,8 @@ What we kept from the earlier shelf plan: staff approve every public message, wa
 Contact: 416.924.0725 · churchoffice@rosedaleunited.org
 
 ## 6. Money
+
+> **Superseded on 2026-11-18** by [BUDGET.md](BUDGET.md): the full $100,000 is used and the website gets $100. The table below is the earlier $61,330.51 plan, kept for reference.
 
 | Category | Year 1 (CAD) |
 | --- | ---: |
