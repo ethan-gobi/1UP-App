@@ -45,32 +45,31 @@ Scope follows the team's chosen direction ([issue #1](https://github.com/ethan-g
 
 ## 5. Tech choices
 
-- **Frontend:** Vite + React + TypeScript, mobile-first progressive web app. Large text, high contrast, keyboard and screen reader friendly.
-- **Data (mock):** an in-memory / localStorage store behind a `Store` interface, so it can switch to Supabase later without rewriting screens.
-- **Core logic:** pure functions in `src/core/` (reserve, redeem, pause, reconcile, expire) with no UI code, so they are easy to test.
-- **Tests:** Vitest for core rules, Playwright for the 6-step demo flow.
-- **Later (not v1):** Supabase (auth + Postgres row locking for the last item), opt-in texts, real payments through the Square reader.
+The working demo in [PR #4](https://github.com/ethan-gobi/1UP-App/pull/4) sets the stack for now:
 
-## 6. Folder layout
+- **Demo:** a local Python server (`demo/server.py`, standard library only) with plain HTML/JS. All roles share one in-memory session, guarded by a single lock.
+- **Tests:** `unittest` over HTTP, including a barrier-based race for the last item.
+- **Later (not v1):** a hosted version with real staff and vendor logins, a durable database (for example Supabase/Postgres with row locks), opt-in texts and real payments. It needs a budget and a named maintainer first.
+
+## 6. Files
 
 ```
-src/core/        domain types + rules (reserve, redeem, expire, pause, reconcile)
-src/store/       Store interface + mock implementation
-src/screens/     the 6 screens
-src/routes.tsx   public, staff and vendor routes (mock role switcher)
-tests/core/      Vitest rule tests
-tests/e2e/       Playwright demo flow
+demo/server.py       rules + HTTP API (approve, open, pause, resume, reserve, collect)
+demo/app.js          role switcher and screens
+demo/index.html      page
+demo/test_pickup.py  HTTP tests
 ```
 
 ## 7. Milestones
 
-| # | Deliverable | Owner |
-| --- | --- | --- |
-| M1 | Project scaffold, `src/core` types and rules, unit tests for every rule in section 3 | Claude |
-| M2 | Mock store + 6 screens + mock role switcher | Claude |
-| M3 | Edge-case test list review, accessibility pass, Playwright demo test | Codex |
-| M4 | Demo script + screenshots for the pitch | Claude + Codex |
-| M5 | Supabase + texts (only after the team approves a budget and maintainer) | Later |
+| # | Deliverable | Owner | Status |
+| --- | --- | --- | --- |
+| M1 | Working demo: approve → checklist + count → reserve → one-time collect → pause | Codex | Done in #4 |
+| M2 | Outage fixes: paper handoffs + recount on resume, idempotent collect, hold expiry, tests | Codex | From the #4 review |
+| M3 | Record who approved what and when; editable host address and hours | Codex | Next |
+| M4 | Review of each PR, plus plan and pitch docs kept in sync | Claude | Ongoing |
+| M5 | Demo script + screenshots for the pitch | Claude + Codex | After M2 |
+| M6 | Hosted version with logins, database and texts | Later | Needs budget + maintainer |
 
 Each milestone is one pull request into `main`. The other agent reviews it, and Gopi merges.
 
