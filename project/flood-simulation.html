@@ -1,0 +1,499 @@
+<title>Brick Works Flood Night</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: test controls on top, river cross-section left, scorecard right, solutions below; stacks to one column on phones */
+:root{
+  --bg:#f3efe9; --panel:#fffdf9; --fg:#2a2420; --muted:#6f655d; --line:#ddd3c8;
+  --brick:#a8462d; --water:#2f6f9a; --water2:#5b9cc8; --mud:#8a6a45; --sky:#ebe5dd; --on:#ffffff;
+  --good:#2e7d4f; --warn:#a86a12; --bad:#b3362a;
+  --display:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1c1917; --panel:#26211e; --fg:#efe8e1; --muted:#a89d93; --line:#3e3632;
+  --brick:#d0694d; --water:#3b82b4; --water2:#5aa4d4; --mud:#a2825c; --sky:#2e2825; --on:#ffffff;
+  --good:#5bb581; --warn:#e0a54a; --bad:#e2685b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1c1917; --panel:#26211e; --fg:#efe8e1; --muted:#a89d93; --line:#3e3632;
+  --brick:#d0694d; --water:#3b82b4; --water2:#5aa4d4; --mud:#a2825c; --sky:#2e2825; --on:#ffffff;
+  --good:#5bb581; --warn:#e0a54a; --bad:#e2685b; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--display);line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+h1{font-size:clamp(24px,4vw,34px);font-weight:800;margin:0;text-wrap:balance;letter-spacing:-.01em;line-height:1.15}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px;color:var(--muted);font-weight:600}
+p{margin:0}
+.sub{color:var(--muted);max-width:78ch}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{font:600 14px var(--display);padding:8px 14px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--water2);outline-offset:2px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px}
+@media (max-width:880px){.grid{grid-template-columns:1fr}}
+.ctrls{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center}
+.ctrls .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;vertical-align:middle}
+.seg button{font:600 13px var(--display);padding:7px 11px;background:var(--panel);color:var(--fg);border:0;border-right:1px solid var(--line);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--water);color:var(--on)}
+.clock{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.clock .t{font:600 20px var(--mono);font-variant-numeric:tabular-nums}
+.clock button{font:600 14px var(--display);padding:7px 14px;border-radius:6px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);cursor:pointer}
+input[type=range]{width:100%;accent-color:var(--water);margin:4px 0 0}
+.ticks{position:relative;height:16px;font:11px var(--mono);color:var(--muted)}
+.ticks span{position:absolute;top:0;white-space:nowrap}
+.scroll{overflow-x:auto}
+.xsec{width:100%;min-width:540px;display:block;margin-top:6px}
+.xsec text{font-family:var(--mono);fill:var(--fg)}
+.log{font:13px/1.55 var(--mono);margin-top:10px;padding:10px 12px;border-left:3px solid var(--water);background:var(--sky);border-radius:0 6px 6px 0;min-height:4.7em}
+.sols{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.sol{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;padding:10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:var(--panel)}
+.sol:has(input:checked){border-color:var(--water);box-shadow:inset 0 0 0 1px var(--water)}
+.sol.flag:has(input:checked){border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
+.sol input{margin-top:3px;accent-color:var(--water)}
+.sol b{font-size:14px}
+.sol small{grid-column:2;color:var(--muted);font-size:12px}
+.tag{font:600 10px var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.tag.team{background:var(--sky);color:var(--brick)}
+.tag.no{background:var(--bad);color:var(--on)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{font:600 12px var(--display);padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--water);color:var(--water)}
+.verdict{display:flex;gap:6px;flex-wrap:wrap;margin:-2px 0 12px}
+.pill{font:600 12px var(--display);padding:3px 9px;border-radius:999px;border:1px solid currentColor}
+.pill.ok{color:var(--good)} .pill.mid{color:var(--warn)} .pill.no{color:var(--bad)}
+.users{display:grid;gap:11px}
+.users.dim .sc,.users.dim .bar{opacity:.4}
+.user{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.user .nm{font-weight:800}
+.user .sc{font:600 20px var(--mono);font-variant-numeric:tabular-nums}
+.user .sc small{font-size:12px;color:var(--muted);margin-left:6px}
+.bar{grid-column:1/-1;height:8px;background:var(--sky);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px;transition:width .3s}
+.user .why{grid-column:1/-1;font-size:12px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;margin-top:14px}
+.kpi{border-top:1px solid var(--line);padding-top:6px;min-width:0}
+.kpi span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.kpi b{font:600 16px var(--mono);font-variant-numeric:tabular-nums}
+.gaps{margin:0;padding-left:18px;display:grid;gap:7px;font-size:14px;max-width:95ch}
+.gaps li.bad::marker{color:var(--bad)} .gaps li.warn::marker{color:var(--warn)} .gaps li.info::marker{color:var(--water)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.ws{display:grid;gap:14px;max-width:920px}
+.ws h3{margin:0 0 6px;font-size:16px}
+.ws .box{border:1.5px solid var(--fg);border-radius:4px;padding:12px 14px;min-width:0}
+.ws .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:700px){.ws .two{grid-template-columns:1fr}}
+.ws ul{margin:6px 0 0;padding-left:18px;display:grid;gap:3px}
+.ws p+p{margin-top:8px}
+.check{font:13px var(--mono)}
+.note{font-size:12px;color:var(--muted);max-width:95ch}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:6px">
+    <h1>Brick Works Flood Night: Yellow Zone stress test</h1>
+    <p class="sub">The Don River floods the Welcome Centre, Garden Market, TD Future Cities Centre and Koerner Gardens. The default run copies the overnight Sept 2, 2026 flood. Switch to daytime to replay July 16, 2024, when about 100 mm of rain fell and 113 campers were evacuated. Turn solutions on and see what changes for Maya, Daniel, Aisha and Marcus.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="sim">Simulation</button>
+    <button role="tab" aria-selected="false" data-tab="ideas">Team ideas, judged</button>
+    <button role="tab" aria-selected="false" data-tab="worksheet">Worksheet (filled)</button>
+  </nav>
+
+  <section id="tab-sim" style="display:grid;gap:18px">
+    <div class="panel ctrls">
+      <div><span class="lbl">When</span><span class="seg" id="tod"><button data-v="night" aria-pressed="true">Overnight (Sept 2, 2026)</button><button data-v="day" aria-pressed="false">Daytime (July 16, 2024)</button></span></div>
+      <div><span class="lbl">Storm</span><span class="seg" id="storm"><button data-v="0.75" aria-pressed="false">Smaller</button><button data-v="1" aria-pressed="true">Like the real floods</button><button data-v="1.35" aria-pressed="false">Bigger than ever</button></span></div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>The flood, hour by hour</h2>
+        <div class="clock"><button id="play">▶ Play</button><span class="t" id="clock"></span><span class="note" id="phase"></span></div>
+        <input type="range" id="slider" min="0" max="35" value="9" aria-label="Time in the flood">
+        <div class="ticks" id="ticks"></div>
+        <div class="scroll"><svg class="xsec" id="xsec" viewBox="0 0 640 250" role="img" aria-label="Water depth at each Yellow Zone building"></svg></div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </div>
+      <div class="panel">
+        <h2>Scorecard <span style="text-transform:none;letter-spacing:0">(0–100, change vs. today's site)</span></h2>
+        <div class="verdict" id="verdict"></div>
+        <div class="users" id="users"></div>
+        <div class="kpis" id="kpis"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px">
+        <h2 style="margin:0">Solutions to test</h2>
+        <div class="row" id="presets">
+          <button class="chip" data-preset="none">Today's site (what happened)</button>
+          <button class="chip" data-preset="combo">Earlier 4-part combo</button>
+          <button class="chip" data-preset="best">Recommended package</button>
+          <button class="chip" data-preset="team">Team's big builds</button>
+        </div>
+      </div>
+      <div class="sols" id="sols"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Stern check: what this setup still gets wrong</h2>
+      <ul class="gaps" id="gaps"></ul>
+    </div>
+    <p class="note">How to read this: water depths, reopening days and scores come from a simple teaching model, not survey data. The model is set to match what is on record. The Don tops its banks quickly. The Garden Market takes the worst ground-floor damage. The Kiln Building's floor is raised about 0.6 m (2 ft). After the 2026 flood, Evergreen listed the site as open daily by Oct 7, day 35. Costs are rough ranges. The $1M budget is an assumption, because your brief only says the budget is low.</p>
+  </section>
+
+  <section id="tab-ideas" hidden>
+    <div class="panel">
+      <h2>Your team's ideas (Pink, Orange, Blue) tested against the flood</h2>
+      <div class="scroll"><table id="ideas"></table></div>
+    </div>
+  </section>
+
+  <section id="tab-worksheet" hidden>
+    <div class="ws">
+      <div class="box check">Target Zone: [ ] Red [ ] Blue [x] Yellow &nbsp;·&nbsp; Persona: [x] Aisha [x] Daniel [x] Maya [x] Marcus &nbsp;·&nbsp; Team Name / Club: __________</div>
+      <div class="box"><h3>Solution: Flood-Ready Yellow Zone</h3><p>Know hours ahead, keep water out of the two key buildings, get stock off the floor, and reopen in under two weeks. The market and events keep running somewhere dry in the meantime. In the simulation it raises all four users from 8–23 points to 72–92, for about $0.5–0.9M.</p></div>
+      <div class="box">
+        <h3>Part 1: The 3-legged stool</h3>
+        <p><b>1. Climate adaptation and nature-based infrastructure.</b> The site already uses wet floodproofing: water is allowed through ground floors, and there is no drywall or carpet. We keep that. We add self-closing barriers only at the Garden Market and TD Future Cities Centre doors, so the rest of the floodplain still drains the way it does now. Rain gardens at Koerner Gardens handle everyday storms. We do not claim they stop a river flood. In the model they lower it by only a few centimetres.</p>
+        <p><b>2. Heritage conservation.</b> Nothing is fixed to historic brick. The barrier frames sit in new floor slabs at the doors, the shelving is movable furniture, and the status screen goes in the new Welcome Centre. Everything can be removed without a trace. That is why we rejected the dome, the underground tank and moving the buildings.</p>
+        <p><b>3. Technology and sustainable energy.</b> River-level sensors and the Don River gauge at Todmorden feed one Green / Yellow / Red status. It shows on a solar-powered screen, the website and opt-in texts. Yellow comes from the forecast, 6–12 hours ahead. Red comes from the gauge, 2–4 hours ahead. The sensors use very little power, which fits a site built around geothermal and solar thermal energy.</p>
+      </div>
+      <div class="box">
+        <h3>Part 2: Hybrid solution architecture</h3>
+        <div class="two">
+          <div><b>Physical intervention</b><ul>
+            <li>Self-closing door barriers (0.9 m) at the Garden Market and Future Cities Centre. They rise with the water, so nobody has to be on site at 2 a.m.</li>
+            <li>Slot-in barrier at the Welcome Centre, put up at closing time on a Yellow day.</li>
+            <li>Raised rolling shelves, with valuable stock kept on the top shelf (team Orange).</li>
+            <li>Pack-into carts for vendors (team Pink).</li>
+            <li>48-hour reopen kit (pumps, dehumidifiers, cleaning gear) stored on the Kiln Building's second floor.</li>
+            <li>Signs marking a family route out to high ground.</li>
+          </ul></div>
+          <div><b>Operational and digital system</b><ul>
+            <li>Green / Yellow / Red status. Yellow means prep (shelves up, carts packed, slot-in barrier in). Red means close and nobody enters the valley.</li>
+            <li>Texts to staff, vendors, families, campers' parents and event clients.</li>
+            <li>An on-call crew with paid standby and trained volunteers (team Orange).</li>
+            <li>A reopen playbook that names who does what in hours 0–48 and sets a target day for each zone.</li>
+            <li>A pop-up plan: the market moves to the raised Kiln floor or a partner site, and events use a backup venue booked in advance.</li>
+            <li>A web page showing what is open today, plus the Kiln Building's second floor as the shelter point.</li>
+          </ul></div>
+        </div>
+      </div>
+      <div class="box">
+        <h3>Part 3: Solution diagram (before / during / after)</h3>
+        <div class="scroll"><svg viewBox="0 0 700 230" style="width:100%;min-width:560px;display:block" role="img" aria-label="Site schematic of the Flood-Ready Yellow Zone">
+          <rect x="0" y="0" width="700" height="230" style="fill:var(--panel)"/>
+          <text x="14" y="22" style="fill:var(--fg);font:600 12px var(--display)">Before: Yellow alert → prep at closing</text>
+          <text x="270" y="22" style="fill:var(--fg);font:600 12px var(--display)">During: barriers self-close, nobody on site</text>
+          <text x="14" y="40" style="fill:var(--fg);font:600 12px var(--display)">After: kit + crew → pop-up opens day 2 → site open around day 9</text>
+          <path d="M0 196 Q200 178 700 198 L700 230 L0 230 Z" style="fill:var(--water2);opacity:.55"/>
+          <text x="14" y="222" style="fill:var(--fg);font:11px var(--mono)">Don River: water spreads across the floodplain</text>
+          <g style="font:11px var(--mono)">
+            <rect x="24" y="80" width="130" height="78" style="fill:none;stroke:var(--brick);stroke-width:2"/>
+            <text x="32" y="98" style="fill:var(--fg)">Welcome Centre</text><text x="32" y="114" style="fill:var(--muted)">status screen</text><text x="32" y="130" style="fill:var(--muted)">info desk</text>
+            <rect x="174" y="80" width="150" height="78" style="fill:none;stroke:var(--brick);stroke-width:2"/>
+            <text x="182" y="98" style="fill:var(--fg)">Garden Market</text><text x="182" y="114" style="fill:var(--muted)">rolling shelves</text><text x="182" y="130" style="fill:var(--muted)">pack-into carts</text>
+            <rect x="344" y="62" width="180" height="96" style="fill:none;stroke:var(--brick);stroke-width:2"/>
+            <rect x="344" y="136" width="180" height="22" style="fill:var(--brick);opacity:.18"/>
+            <text x="352" y="80" style="fill:var(--fg)">TD Future Cities Ctr</text><text x="352" y="96" style="fill:var(--muted)">2F: shelter + reopen kit</text><text x="352" y="112" style="fill:var(--muted)">pop-up market/events</text><text x="352" y="152" style="fill:var(--brick)">floor +0.6 m</text>
+            <rect x="544" y="104" width="140" height="54" style="fill:none;stroke:var(--good);stroke-dasharray:4 3"/>
+            <text x="552" y="124" style="fill:var(--fg)">Koerner Gardens</text><text x="552" y="140" style="fill:var(--muted)">rain gardens</text>
+          </g>
+          <line x1="24" y1="158" x2="24" y2="128" style="stroke:var(--warn);stroke-width:5;stroke-dasharray:6 3"/>
+          <line x1="174" y1="158" x2="174" y2="124" style="stroke:var(--warn);stroke-width:5"/>
+          <line x1="344" y1="158" x2="344" y2="124" style="stroke:var(--warn);stroke-width:5"/>
+          <text x="180" y="174" style="fill:var(--warn);font:10px var(--mono)">self-closing barrier 0.9 m</text>
+          <text x="28" y="174" style="fill:var(--warn);font:10px var(--mono)">slot-in</text>
+          <path d="M100 62 C 160 50, 260 48, 330 56" style="fill:none;stroke:var(--good);stroke-width:2;stroke-dasharray:5 4"/>
+          <path d="M322 51 L332 56 L323 62" style="fill:none;stroke:var(--good);stroke-width:2"/>
+          <text x="150" y="58" style="fill:var(--good);font:10px var(--mono)">signed family route → exit / high ground</text>
+          <path d="M640 196 L640 168 M631 177 L640 166 L649 177" style="fill:none;stroke:var(--water);stroke-width:2"/>
+        </svg></div>
+      </div>
+      <div class="box">
+        <h3>Part 4: Full proposed solution write-up</h3>
+        <p><b>What.</b> A low-cost package for the Yellow Zone. It combines a live flood status screen with text alerts, self-closing barriers at the two key doors, raised rolling shelves and pack-into carts for stock, a 48-hour reopen kit with an on-call crew, a pop-up plan for the market and events, and a signed family route with a shelter point.</p>
+        <p><b>Why.</b> In the 2024 and 2026 floods, the buildings did most of what they were designed to do. People were hurt in other ways: lost stock, about five weeks of closure, and no clear word on what was open. This package gives each user something they can see. Maya gets one source of truth and a playbook. Daniel can check the status before leaving home and knows where to go on site. Aisha keeps her stock and can sell from a pop-up by day 2. Marcus gets a dry venue and a backup he can promise his clients.</p>
+        <p><b>How.</b> A Yellow alert arrives before closing time. Staff put shelves up, pack the carts and put in the Welcome Centre barrier, then go home. Nobody is sent into the valley at night. The other barriers close by themselves. After the water drops, the crew pumps, washes and dries everything using the kit. In the model the site is open daily again around day 9, not day 35. Nothing touches heritage brick, and the cost is about $0.5–0.9M. A dome or relocation would cost tens of millions.</p>
+        <p><b>Weak spots we admit.</b> Koerner Gardens still floods and stays shut for about three weeks, so Daniel's family space and the rink area come back last. A storm bigger than the 0.9 m barriers gets in. Test it with "Bigger than ever": Marcus's venue floods and his score drops to about 59. Forecast-based Yellow alerts will sometimes close the site early for storms that miss. Barrier pits at the doors still need TRCA and heritage sign-off.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const BUDGET=1000, BAR_H=0.9, FLOOR=0.6;
+const PEAK={wc:.5,gm:.8,fcc:.7,kg:1.0};
+const S=[
+ {id:"alerts",n:"Flood status screen + text alerts",d:"Forecast + Don gauge at Todmorden → Green/Yellow/Red on screen, web and SMS",c:[40,80]},
+ {id:"barriers",n:"Door flood barriers (0.9 m)",d:"Self-closing at Garden Market + Kiln Building; slot-in at Welcome Centre",c:[250,400]},
+ {id:"shelves",n:"Raised rolling shelves",d:"Valuable stock on high shelves, roll it up fast",c:[60,120],team:"Orange"},
+ {id:"kit",n:"48-hour reopen kit + playbook",d:"Pumps, dehumidifiers, roles, a target day per zone",c:[50,100],team:"Pink"},
+ {id:"crew",n:"On-call recovery crew",d:"Paid standby roster + trained volunteers",c:[30,60],team:"Orange"},
+ {id:"popup",n:"Pop-up market + event backup",d:"Pack-into carts; move to the raised Kiln floor or a partner site",c:[40,90],team:"Pink"},
+ {id:"family",n:"Family route + shelter point",d:"Signed route to high ground; Kiln 2nd floor as shelter; 'open today' page",c:[20,50]},
+ {id:"sponge",n:"Rain gardens + permeable paving",d:"Soaks up storm rain around Koerner Gardens",c:[200,500]},
+ {id:"boardwalk",n:"Raised dry boardwalk",d:"Stroller-friendly route that doubles as the way out",c:[1500,3000],team:"Orange",h:"approval"},
+ {id:"hub",n:"Four-season covered hub",d:"Canopy and wind screens over part of Koerner Gardens",c:[2000,4000],h:"approval"},
+ {id:"humidity",n:"Humidity alarm (over 75%)",d:"Alarm sounds when air humidity passes 75%",c:[10,20],team:"Blue",flag:1},
+ {id:"dome",n:"Giant dome + 250-person bunker",d:"Cover the site; shelter people underground",c:[60000,150000],team:"Blue",flag:1,h:"break"},
+ {id:"tank",n:"Honeycomb underground tank",d:"A huge void under the site to swallow floodwater",c:[8000,20000],team:"Pink",flag:1,h:"break"},
+ {id:"float",n:"Floating buildings",d:"Buildings rise with the water, held by fences",c:[20000,50000],team:"Pink",flag:1,h:"break"},
+ {id:"relocate",n:"Move facilities off the floodplain",d:"Old site kept as heritage only",c:[80000,200000],team:"Pink",flag:1,h:"break"},
+];
+const PRESET={none:[],combo:["alerts","barriers","kit","popup"],best:["alerts","barriers","shelves","kit","crew","popup","family"],team:["humidity","dome","tank","float","relocate"]};
+const state={on:new Set(PRESET.best),storm:1,tod:"night"};
+const DAYS=[2,3,4,5,7,10,14,21,28,35,49];
+const F=[...Array(25).keys()].map(h=>({h})).concat(DAYS.map(d=>({d})));
+const START={night:{y:2026,m:8,d:2,hour:18},day:{y:2024,m:6,d:16,hour:4}};
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const $=id=>document.getElementById(id);
+const cl=v=>Math.max(0,Math.min(100,Math.round(v)));
+function shape(h){ if(h<5)return 0; if(h<9)return (h-5)/4; if(h<=10)return 1; if(h<18)return 1-(h-10)/8; return 0;}
+function dateOf(n){const s=START[state.tod];const d=new Date(s.y,s.m,s.d+n);return MON[d.getMonth()]+" "+d.getDate();}
+function money(c){const f=v=>v>=1000?`$${(v/1000).toFixed(v>=10000?0:1)}M`:`$${v}K`;return c[0]===c[1]?f(c[0]):`${f(c[0])}–${f(c[1])}`;}
+
+function model(set,storm,tod){
+  const has=k=>set.has(k), day=tod==="day", alerts=has("alerts");
+  const warn=alerts?4:(day?1:0.5);           // hours of usable warning before water reaches buildings
+  const prep=alerts?1:(day?0.5:0);           // how much pre-flood prep gets done (staff on site in daytime)
+  const shrink=(has("tank")?0.95:1)*(has("sponge")?0.96:1);
+  const out={}; for(const k in PEAK) out[k]=PEAK[k]*storm*shrink;
+  const wcUp=prep>=0.5;                      // slot-in barrier only goes up if someone is warned or on site
+  const bar=(o,up)=>!(has("barriers")&&up)?o:(o<=BAR_H?o*0.15:o*0.9);
+  const lvl={wc:bar(out.wc,wcUp),gm:bar(out.gm,true),fcc:bar(out.fcc,true)};
+  const inside={wc:lvl.wc,gm:lvl.gm,fcc:Math.max(0,lvl.fcc-FLOOR),kg:out.kg};
+  const over={wc:has("barriers")&&wcUp&&out.wc>BAR_H,gm:has("barriers")&&out.gm>BAR_H,fcc:has("barriers")&&out.fcc>BAR_H};
+  const gmR=Math.min(1.5,inside.gm/0.8), wcR=Math.min(1.5,inside.wc/0.5), fccR=Math.min(1.5,inside.fcc/0.1), kgR=inside.kg;
+  const kitF=has("kit")?0.6:1, crewF=has("crew")?0.85:1;
+  let site=Math.max(5,Math.round((8+27*(gmR+wcR+fccR+kgR)/4)*kitF*crewF));
+  let market=Math.max(site,Math.round((5+30*gmR)*kitF*crewF));
+  const garden=Math.max(site,Math.round((10+25*kgR)*(has("kit")?0.75:1)*crewF));
+  let stock=70*Math.min(1.35,gmR);
+  stock*=has("shelves")?(0.5-0.25*prep):(1-0.2*prep);
+  if(has("popup")) stock*=(1-0.3*prep);
+  stock=Math.min(95,stock);
+  const popStart=prep>=0.5?2:4;
+  let sellLost=has("popup")&&market>popStart?popStart+(market-popStart)*0.4:market;
+  const fccDry=inside.fcc<0.01;
+  let ind=site/35, outd=garden/35;
+  if(has("popup")){ind*=0.2;outd*=0.5;}
+  let events=Math.min(100,100*(0.7*ind+0.3*outd));
+  if(has("relocate")){stock=0;market=0;sellLost=0;events=5;}
+  const cost=[0,0]; S.forEach(s=>{if(set.has(s.id)){cost[0]+=s.c[0];cost[1]+=s.c[1];}});
+  const recovery=cl(100*(35-site)/30), gardensOpen=cl(100*(35-garden)/30);
+  const safety=cl((day?25:40)+(alerts?45:0)+(has("family")?10:0)+(has("boardwalk")?10:0)-(has("dome")?55:0)-(has("humidity")&&!alerts?5:0));
+  const comms=cl((alerts?90:25)+(has("family")?5:0)-(has("humidity")?20:0));
+  const info=cl((alerts?85:20)*(has("humidity")&&!alerts?0.4:1)+(has("family")?10:0)-(has("humidity")?15:0));
+  const safe=cl(20+(alerts?10:0)+(has("family")?25:0)+(has("boardwalk")?30:0)+(has("hub")?20:0)-(has("dome")?30:0));
+  const access=cl((recovery+gardensOpen)/2+(has("hub")?10:0));
+  const venue=cl(fccDry?100:100-inside.fcc*400);
+  const conf=cl(20+(alerts?25:0)+(has("popup")?30:0)+(has("kit")?15:0)+(has("hub")?10:0));
+  return {warn,prep,out,inside,over,wcUp,site,market,garden,stock,sellLost,popStart,events:Math.round(events),fccDry,cost,
+    recovery,gardensOpen,safety,comms,info,safe,access,venue,conf,
+    maya:cl(.35*safety+.35*recovery+.3*comms),
+    daniel:cl(.35*info+.35*safe+.3*access),
+    aisha:cl(.4*cl(100-stock*1.3)+.4*cl(100*(1-sellLost/35))+.2*(alerts?85:20)),
+    marcus:cl(.45*(100-events)+.3*venue+.25*conf)};
+}
+
+function verdictFor(M,set){
+  const v=[];
+  const breaks=S.filter(s=>set.has(s.id)&&s.h==="break"), appr=S.filter(s=>set.has(s.id)&&s.h==="approval");
+  if(M.cost[0]>BUDGET) v.push(["no",`Over budget: ${money(M.cost)}`]);
+  else if(M.cost[1]>BUDGET) v.push(["mid",`Budget: ${money(M.cost)}, may pass $1M`]);
+  else v.push(["ok",`Within $1M: ${M.cost[0]?money(M.cost):"$0"}`]);
+  if(breaks.length) v.push(["no","Breaks heritage rule"]);
+  else if(appr.length) v.push(["mid","Needs heritage approval"]);
+  else v.push(["ok","Heritage untouched"]);
+  return {pills:v,buildable:M.cost[0]<=BUDGET&&!breaks.length};
+}
+
+function renderSols(){
+  $("sols").innerHTML=S.map(s=>`<label class="sol${s.flag?" flag":""}"><input type="checkbox" id="s-${s.id}" ${state.on.has(s.id)?"checked":""}><span><b>${s.n}</b>${s.team?`<span class="tag team">${s.team}</span>`:""}${s.flag?`<span class="tag no">fails</span>`:""}</span><small>${s.d} · ${money(s.c)}</small></label>`).join("");
+  S.forEach(s=>$("s-"+s.id).addEventListener("change",e=>{e.target.checked?state.on.add(s.id):state.on.delete(s.id);update();}));
+}
+function col(v){return v>=70?"var(--good)":v>=50?"var(--warn)":"var(--bad)";}
+
+function renderScores(M,B){
+  const vd=verdictFor(M,state.on);
+  $("verdict").innerHTML=vd.pills.map(p=>`<span class="pill ${p[0]}">${p[1]}</span>`).join("")+(vd.buildable?"":`<span class="note" style="align-self:center">Scores shown as if it could be built.</span>`);
+  const U=[
+   ["Maya","staff","maya",`safety ${M.safety} · recovery ${M.recovery} · communication ${M.comms}`],
+   ["Daniel","parent","daniel",`status before visiting ${M.info} · safe spaces ${M.safe} · open days ${M.access}`],
+   ["Aisha","vendor","aisha",`stock lost ${Math.round(M.stock)}% · selling days lost ${Math.round(M.sellLost)}`],
+   ["Marcus","events","marcus",`bookings lost ${M.events}% · venue ${M.venue} · confidence ${M.conf}`],
+  ];
+  $("users").className="users"+(vd.buildable?"":" dim");
+  $("users").innerHTML=U.map(u=>{const v=M[u[2]],d=v-B[u[2]];return `<div class="user"><span><span class="nm">${u[0]}</span> <span class="note">${u[1]}</span></span><span class="sc" style="color:${col(v)}">${v}<small>${d>0?"+":d<0?"−":"±"}${Math.abs(d)}</small></span><div class="bar"><i style="width:${v}%;background:${col(v)}"></i></div><span class="why">${u[3]}</span></div>`;}).join("");
+  const warnTxt=M.warn<1?"~30 min":M.warn+" h";
+  $("kpis").innerHTML=[
+   ["Warning before water",warnTxt],
+   ["Site open daily again",`day ${M.site} · ${dateOf(M.site)}`],
+   ["Koerner Gardens reopens",`day ${M.garden}`],
+   ["Market stock lost",`${Math.round(M.stock)}%`],
+   ["Event bookings lost",`${M.events}%`],
+   ["Kiln Building floor",M.fccDry?"dry":`${M.inside.fcc.toFixed(2)} m water`],
+  ].map(k=>`<div class="kpi"><span>${k[0]}</span><b>${k[1]}</b></div>`).join("");
+}
+
+function renderGaps(M){
+  const g=[], has=k=>state.on.has(k), night=state.tod==="night";
+  if(has("dome")) g.push(["bad","Dome + bunker: on a floodplain the water rises through the ground, so a dome fills from below. An underground bunker is the most dangerous place to put 250 people in a flood. It would also cost tens of millions and hide the heritage buildings. Drop it."]);
+  if(has("humidity")) g.push(["bad","Humidity alarm: Toronto summer nights pass 75% humidity most of the time, so it would go off constantly and people would stop listening. Humidity also tells you nothing about the Don rising. Use river-level sensors."]);
+  if(has("tank")) g.push(["bad","Underground tank: a Don flood moves millions of cubic metres, so a tank under the site fills in minutes. In the model it lowers the flood by only 5%. Digging under the kilns breaks your 'heritage untouched' rule."]);
+  if(has("float")) g.push(["bad","Floating buildings: brick buildings from the 1880s–1950s cannot be made to float. Amphibious design only works for new, light structures like a market kiosk."]);
+  if(has("relocate")) g.push(["bad","Relocation: it solves the flood by leaving the Yellow Zone. It costs many times any realistic budget and gives up the reason people come here. Koerner Gardens still floods."]);
+  if(M.cost[0]>BUDGET) g.push(["bad",`Over budget: at least ${money([M.cost[0],M.cost[0]])} against an assumed $1M.`]);
+  else if(M.cost[1]>BUDGET) g.push(["warn",`The top of the cost range (${money([M.cost[1],M.cost[1]])}) passes $1M.`]);
+  if(!has("alerts")) g.push(["bad",`No early warning. Water reaches the buildings with ${M.warn<1?"about 30 minutes":"about an hour"} of notice. Daniel can't check before leaving home, and nobody preps stock or doors${night?" overnight":""}.`]);
+  else g.push(["warn","Forecast-based Yellow alerts will sometimes close the site early for a storm that misses, and Aisha pays for those. Keep Yellow for prep only and Red for closing."]);
+  if(!has("barriers")) g.push(["warn",`No barriers: the Garden Market has ${M.inside.gm.toFixed(2)} m of water inside at peak${M.fccDry?"":`, and the Kiln Building floor is under ${M.inside.fcc.toFixed(2)} m`}.`]);
+  else if(M.over.gm||M.over.fcc) g.push(["bad",`This storm tops the 0.9 m barriers (${M.out.gm.toFixed(2)} m outside the market). Water pours in${M.over.fcc?" and covers the Kiln Building's raised floor, so Marcus's venue floods":""}.`]);
+  else g.push(["warn","The barriers stop at 0.9 m, and old brick walls still seep. Try \"Bigger than ever\" to see what happens when they are topped."]);
+  if(has("barriers")&&!M.wcUp) g.push(["warn","Without an alert, nobody puts up the Welcome Centre's slot-in barrier on an overnight storm."]);
+  if(M.stock>15) g.push(["warn",`Aisha still loses about ${Math.round(M.stock)}% of the market's ground-level stock.`]);
+  if(!has("popup")&&!has("relocate")) g.push(["warn",`No Plan B: Aisha loses ${Math.round(M.sellLost)} selling days and Marcus loses ${M.events}% of bookings.`]);
+  if(!has("kit")) g.push(["warn",`Recovery is improvised, so the site is open daily again only around day ${M.site}.`]);
+  if(M.daniel<70){const why=[]; if(!has("family")&&!has("boardwalk")) why.push("no signed route or shelter point"); if(!has("alerts")) why.push("no status to check"); why.push(`the gardens stay shut until day ${M.garden}`); g.push([M.daniel<50?"bad":"warn",`Daniel is the weakest user (${M.daniel}): ${why.join(", ")}.`]);}
+  g.push(["warn",`Koerner Gardens still takes ${M.inside.kg.toFixed(2)} m of water and stays closed until day ${M.garden}. No affordable fix keeps a river out of an open garden, so it is the last space to reopen.`]);
+  if(has("sponge")) g.push(["warn","Rain gardens lower this river flood by only a few centimetres. They help with everyday storms and teaching, not with a 100-year flood."]);
+  if(has("hub")) g.push(["warn","Covered hub: a canopy over the historic roof girders needs heritage approval, and it floods like the rest of the garden."]);
+  if(has("boardwalk")) g.push(["warn","Boardwalk: it costs $1.5M or more and needs TRCA and heritage approval. It has to sit above flood height, or it becomes one more thing to clean."]);
+  if(night) g.push(["info","This run is an overnight storm with almost nobody on site. Switch to Daytime (July 2024, 113 campers evacuated) to test what happens when people are on site."]);
+  const order={bad:0,warn:1,info:2};
+  $("gaps").innerHTML=g.sort((a,b)=>order[a[0]]-order[b[0]]).map(x=>`<li class="${x[0]}">${x[1]}</li>`).join("");
+}
+
+const ZONES=[["wc","Welcome Ctr"],["gm","Garden Market"],["fcc","Future Cities"],["kg","Koerner Gdns"]];
+function clockLabel(f){
+  if(f.d) return `Day ${f.d} · ${dateOf(f.d)}`;
+  const t=START[state.tod].hour+f.h; return `${dateOf(Math.floor(t/24))} · ${String(t%24).padStart(2,"0")}:00`;
+}
+function renderTicks(){
+  const T=[[0,"Start"],[9,"Peak"],[18,"Water gone"],[25,"Day 2"],[34,"Day 35"]];
+  $("ticks").innerHTML=T.map(([i,l])=>{const p=i/35*100;const tr=p<5?"0":p>92?"-100%":"-50%";return `<span style="left:${p}%;transform:translateX(${tr})">${l}</span>`;}).join("");
+}
+
+function renderFrame(M){
+  const i=+$("slider").value, f=F[i], has=k=>state.on.has(k);
+  $("clock").textContent=clockLabel(f);
+  $("phase").textContent=f.d?"after the flood":(f.h<5?"rain building":f.h<9?"river over its banks":f.h<=10?"peak":f.h<18?"water falling":"water gone, silt left");
+  const base=200, sc=110, s=f.d?0:shape(f.h); let o="";
+  o+=`<rect x="0" y="0" width="640" height="250" style="fill:var(--panel)"/>`;
+  [0,.5,1,1.5].forEach(v=>{const y=base-v*sc;o+=`<line x1="36" y1="${y}" x2="634" y2="${y}" style="stroke:var(--line);stroke-dasharray:3 4"/><text x="2" y="${y+4}" style="fill:var(--muted);font-size:10px">${v.toFixed(1)} m</text>`;});
+  ZONES.forEach(([z,name],k)=>{
+    const x=46+k*148, w=128, outD=M.out[z]*s, inD=M.inside[z]*s, floor=z==="fcc"?FLOOR:0;
+    if(z!=="kg"){
+      o+=`<line x1="${x+14}" y1="${base}" x2="${x+14}" y2="20" style="stroke:var(--brick);stroke-width:2"/><line x1="${x+w-14}" y1="${base}" x2="${x+w-14}" y2="20" style="stroke:var(--brick);stroke-width:2"/><line x1="${x+14}" y1="20" x2="${x+w-14}" y2="20" style="stroke:var(--brick);stroke-width:2;stroke-dasharray:4 4"/>`;
+      if(floor){o+=`<rect x="${x+15}" y="${base-floor*sc}" width="${w-30}" height="${floor*sc}" style="fill:var(--brick);opacity:.18"/><text x="${x+w/2}" y="${base-floor*sc+16}" text-anchor="middle" style="fill:var(--brick);font-size:9px">raised floor</text>`;}
+    } else {
+      o+=`<path d="M${x+24} ${base} l10 -30 l10 30 M${x+56} ${base} l13 -40 l13 40 M${x+94} ${base} l9 -24 l9 24" style="stroke:var(--good);stroke-width:2;fill:none"/>`;
+    }
+    if(outD>0.001){
+      if(z==="kg") o+=`<rect x="${x}" y="${base-outD*sc}" width="${w}" height="${outD*sc}" style="fill:var(--water2);opacity:.75"/>`;
+      else o+=`<rect x="${x}" y="${base-outD*sc}" width="13" height="${outD*sc}" style="fill:var(--water);opacity:.8"/><rect x="${x+w-13}" y="${base-outD*sc}" width="13" height="${outD*sc}" style="fill:var(--water);opacity:.8"/>`;
+    }
+    if(z!=="kg"&&inD>0.004) o+=`<rect x="${x+15}" y="${base-(floor+inD)*sc}" width="${w-30}" height="${inD*sc}" style="fill:var(--water2);opacity:.75"/>`;
+    if(z==="fcc"&&!f.d&&s>0){const lv=Math.min(FLOOR,(z==="fcc"?(has("barriers")?(M.out.fcc<=BAR_H?M.out.fcc*.15:M.out.fcc*.9):M.out.fcc):0)*s); if(lv>0.004) o+=`<rect x="${x+15}" y="${base-lv*sc}" width="${w-30}" height="${lv*sc}" style="fill:var(--water2);opacity:.35"/>`;}
+    const barrierUp=has("barriers")&&z!=="kg"&&(z!=="wc"||M.wcUp);
+    if(barrierUp) o+=`<line x1="${x+14}" y1="${base}" x2="${x+14}" y2="${base-BAR_H*sc}" style="stroke:var(--warn);stroke-width:5"/>`;
+    const reopen=z==="kg"?M.garden:z==="gm"?(state.on.has("relocate")?M.site:M.market):M.site;
+    const wetAfter=(f.d||f.h>=18)&&(z==="kg"||M.inside[z]>0.004);
+    const open=f.d&&f.d>=reopen;
+    if(wetAfter&&!open) o+=`<rect x="${x+15}" y="${base-floor*sc-5}" width="${w-30}" height="5" style="fill:var(--mud)"/>`;
+    o+=`<line x1="${x}" y1="${base}" x2="${x+w}" y2="${base}" style="stroke:var(--fg)"/>`;
+    o+=`<text x="${x+w/2}" y="${base+16}" text-anchor="middle" style="font-size:11px;font-weight:600">${name}</text>`;
+    let l2,l3,c3;
+    if(f.d){ l2=open?`open since day ${reopen}`:`opens day ${reopen}`; l3=open?"OPEN":"CLOSED"; c3=open?"var(--good)":"var(--bad)"; }
+    else if(z==="kg"){ l2=`${outD.toFixed(2)} m deep`; l3=outD>0.02?"FLOODED":wetAfter?"silt":"dry"; c3=outD>0.02?"var(--bad)":"var(--good)"; }
+    else { l2=`outside ${outD.toFixed(2)} · in ${inD.toFixed(2)} m`; l3=inD>0.3?"FLOODED":inD>0.02?"wet floor":wetAfter?"silt":"dry inside"; c3=inD>0.3?"var(--bad)":inD>0.02?"var(--warn)":"var(--good)"; }
+    o+=`<text x="${x+w/2}" y="${base+30}" text-anchor="middle" style="fill:var(--muted);font-size:10px">${l2}</text>`;
+    o+=`<text x="${x+w/2}" y="${base+44}" text-anchor="middle" style="fill:${c3};font-size:10px;font-weight:600">${l3}</text>`;
+  });
+  if(has("barriers")) o+=`<text x="${46+148+18}" y="${base-BAR_H*sc-4}" style="fill:var(--warn);font-size:9px">0.9 m barrier</text>`;
+  $("xsec").innerHTML=o;
+  $("log").textContent=logFor(f,M);
+}
+
+function logFor(f,M){
+  const has=k=>state.on.has(k), day=state.tod==="day", alerts=has("alerts"), t=clockLabel(f)+" · ";
+  if(f.d){
+    const p=[];
+    if(f.d===2){
+      p.push(has("kit")?"The reopen kit and playbook are out, and every room has an owner and a target day.":"Clean-up starts without a plan. Staff hunt for pumps and cleaners.");
+      if(has("relocate")) p.push("The market and events carry on at the new site. The old site is cleaned as a heritage park.");
+      else p.push(has("popup")?`The pop-up market opens ${M.fccDry?"on the dry Kiln Building floor":"at a partner site off the floodplain"}.`:"The Farmers Market has to find a new home. In 2026 it moved to the Distillery District.");
+    }
+    p.push(f.d>=M.site?`Site open daily since day ${M.site}.`:`Site still closed (target day ${M.site}).`);
+    if(!has("relocate")&&M.market>M.site) p.push(f.d>=M.market?`Garden Market open since day ${M.market}.`:`Garden Market opens day ${M.market}.`);
+    p.push(f.d>=M.garden?`Koerner Gardens open since day ${M.garden}.`:`Koerner Gardens closed until day ${M.garden}.`);
+    if(f.d===35&&!day) p.push("In 2026, Evergreen listed the site as open daily by Oct 7, which is day 35.");
+    if(!alerts&&f.d<M.site) p.push("Families rely on news and social posts to find out what's open.");
+    return t+p.join(" ");
+  }
+  const h=f.h;
+  if(h<2) return t+(day
+    ?"Rainfall warning overnight for heavy rain. Day camp opens at 08:30 and the market at 09:00."+(alerts?" Status has been YELLOW since last evening. Camp families were texted, and stock is up on the shelves.":"")
+    :"Rainfall warning for heavy rain overnight. The site closes for the night with Garden Market stock on the floor."+(alerts?" Status goes YELLOW. Before leaving, staff put the shelves up, pack the carts and put in the Welcome Centre barrier.":""));
+  if(h<4) return t+"Heavy rain. The drains in Koerner Gardens back up."+(has("humidity")?" The humidity alarm goes off, as it did three nights this week, and nobody reacts.":"");
+  if(h<5) return t+(alerts
+    ?"The Don River gauge at Todmorden jumps, and the status goes RED. Texts go to staff, vendors, families and event clients."+(day?" Campers and visitors are out before the water arrives.":" Nobody is sent into the valley at night.")
+    :(day?"The river is rising fast. Staff notice and start getting campers and visitors out. It is a scramble.":"The river is rising fast upstream. Nobody on site is watching it."));
+  if(h<7) return t+"The Don tops its banks, and water spreads across the parking lot and Koerner Gardens."+(has("barriers")?" The barriers at the Garden Market and Kiln Building close by themselves.":"");
+  if(h<9) return t+(M.over.gm?"Water rises over the market's barrier and pours in.":M.inside.gm>0.3?"Water pushes into the Garden Market, and ground-level stock is soaking.":M.inside.gm>0.02?`Water seeps through the old brick, and the Garden Market floor gets wet. ${has("shelves")?"Stock on the high shelves stays dry.":"Stock on the floor gets wet."}`:"The Garden Market stays dry.");
+  if(h<=10) return t+`Peak. There is ${M.out.gm.toFixed(2)} m of water outside the market and ${M.inside.gm.toFixed(2)} m inside. The Kiln Building's raised floor is ${M.fccDry?"dry":"under "+M.inside.fcc.toFixed(2)+" m"}. Koerner Gardens is under ${M.inside.kg.toFixed(2)} m.`;
+  if(h<13) return t+"The water starts dropping. "+(day?"Everyone is out, and staff wait for the all-clear.":alerts?"Staff arrive at first light with the playbook.":"Staff arrive at first light and find out how bad it is.");
+  if(h<18) return t+"The water keeps falling, leaving silt and debris wherever it reached.";
+  return t+"The water is off the site, leaving a layer of silt in every room it entered."+(has("kit")?" Pumps and dehumidifiers from the kit are running.":"");
+}
+
+function update(){
+  const M=model(state.on,state.storm,state.tod), B=model(new Set(),state.storm,state.tod);
+  renderScores(M,B); renderGaps(M); renderFrame(M);
+  document.querySelectorAll("[data-preset]").forEach(b=>{const p=PRESET[b.dataset.preset];b.setAttribute("aria-pressed",p.length===state.on.size&&p.every(x=>state.on.has(x)));});
+}
+
+const IDEAS=[
+ ["Pink","Move facilities; keep the old site as heritage","Fails","Costs $80M or more and leaves the Yellow Zone behind. It breaks the budget limit in your own HMW."],
+ ["Pink","Pop-up market in pack-into carts","Keep","There is real precedent: the Farmers Market moved to the Distillery District after the 2026 flood. Carts make the move faster."],
+ ["Pink","48-hour reopen kit + playbook","Keep","The biggest single cut in closure days, and it is cheap."],
+ ["Pink","Market designed for quick cleaning","Keep","The site already avoids drywall and carpet. Extend that to the fixtures."],
+ ["Pink","Honeycomb underground tank / pool / rink","Fails","A river flood is far too big for any tank. Digging under the kilns damages heritage."],
+ ["Pink","Floating buildings","Fails","Heritage brick can't float. Floating would only work for a new, light kiosk."],
+ ["Orange","Paid standby crew + volunteers","Keep","Speeds up recovery. Pair it with alerts so nobody drives into the valley during the storm."],
+ ["Orange","Raised rolling shelves, valuables on top","Keep","Directly protects Aisha's stock. Works best when an alert gives time to load them."],
+ ["Orange","Raised market platform for people","Weak","Don't keep people waiting in a flood zone. Close early on an alert and use a signed route out."],
+ ["Orange","Raised boardwalk out","Partly","The best fix for Daniel, but it costs $1.5M or more and needs TRCA and heritage approval."],
+ ["Blue","Giant dome","Fails","Floodplain water rises from below. A dome hides the heritage buildings and costs tens of millions."],
+ ["Blue","Humidity-triggered alarm","Fails","75% humidity is normal on summer nights, so it would give constant false alarms. Use river-level sensors."],
+ ["Blue","Visible flood information hub","Keep","Good instinct. It becomes the status screen, fed by river gauges."],
+ ["Blue","Underground bunker for 250","Fails","Underground on a floodplain is a drowning risk. Get people uphill instead."],
+];
+$("ideas").innerHTML="<tr><th>Team</th><th>Idea</th><th>Verdict</th><th>Why</th></tr>"+IDEAS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="font-weight:700;color:${r[2]==="Keep"?"var(--good)":r[2]==="Fails"?"var(--bad)":"var(--warn)"}">${r[2]}</td><td>${r[3]}</td></tr>`).join("");
+
+const TABS=["sim","ideas","worksheet"];
+function showTab(t){ if(!TABS.includes(t)) t="sim"; document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===t)); TABS.forEach(n=>$("tab-"+n).hidden=n!==t); }
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{showTab(b.dataset.tab); try{history.replaceState(null,"","#"+b.dataset.tab);}catch(e){location.hash=b.dataset.tab;}}));
+window.addEventListener("hashchange",()=>showTab(location.hash.slice(1)));
+document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{state.on=new Set(PRESET[b.dataset.preset]);renderSols();update();}));
+function seg(id,key,parse){ $(id).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state[key]=parse(b.dataset.v);$(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));update();})); }
+seg("tod","tod",v=>v); seg("storm","storm",Number);
+$("slider").addEventListener("input",()=>renderFrame(model(state.on,state.storm,state.tod)));
+let timer=null;
+function stop(){clearInterval(timer);timer=null;$("play").textContent="▶ Play";}
+$("play").addEventListener("click",()=>{
+  if(timer){stop();return;}
+  const s=$("slider"); if(+s.value>=F.length-1) s.value=0;
+  $("play").textContent="❚❚ Pause";
+  timer=setInterval(()=>{ if(+s.value>=F.length-1){stop();return;} s.value=+s.value+1; renderFrame(model(state.on,state.storm,state.tod)); },500);
+});
+renderTicks(); renderSols(); update(); showTab(location.hash.slice(1));
+window.__model=model;
+</script>
