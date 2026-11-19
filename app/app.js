@@ -48,7 +48,7 @@ async function loadLive() {
   const today = ymd(new Date());
   const vars = "relative_humidity_2m,precipitation,temperature_2m,surface_pressure,snow_depth";
   const [wx, rain, gauge] = await Promise.all([
-    getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${vars}&past_days=35&forecast_days=7&timezone=${encodeURIComponent(TZ)}`),
+    getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${vars}&past_days=35&forecast_days=8&timezone=${encodeURIComponent(TZ)}`),
     stationRain(addDays(today, -40), addDays(today, -1)),
     getJSON(`${ECCC}/hydrometric-realtime/items?STATION_NUMBER=02HC024&properties=DATETIME,DISCHARGE,LEVEL&sortby=-DATETIME&f=json&limit=9000`).catch(() => null),
   ]);
@@ -137,7 +137,7 @@ function renderForecast(D) {
     recovery: "Water is down. Recovery under way.",
   }[lv];
   $("headline").textContent = head;
-  $("subline").textContent = `${pct(t.p)}% chance the Don at Todmorden runs high today. ${LEVELS[lv].summary}`;
+  $("subline").textContent = `${pct(t.p)}% chance the Don at Todmorden runs high today or tomorrow. ${LEVELS[lv].summary}`;
 
   // Drivers: the inputs pushing today's score up the most, in plain words.
   const M = S.model.weather, f = t.f;
@@ -145,6 +145,7 @@ function renderForecast(D) {
   const rainOn = (n) => Math.expm1(D.days.find((d) => d.date === addDays(D.today, n))?.f.lp ?? 0);
   const items = [
     ["lp", "Rain today", `${rainOn(0).toFixed(0)} mm`],
+    ["lpn", "Rain tomorrow", `${rainOn(1).toFixed(0)} mm`],
     ["lp1", "Last 3 days", `${(rainOn(-1) + rainOn(-2) + rainOn(-3)).toFixed(0)} mm`],
     ["lapi", "Ground wetness", `${Math.expm1(f.lapi).toFixed(0)} mm stored`],
     ["rh5pk", "Humidity before rain", `${Math.round(f.rh5pk * 100)}%`],
@@ -220,7 +221,8 @@ function hindcastChart(el, days) {
   const H = el.clientHeight || 190, pad = { l: 34, r: 40, t: 10, b: 22 }, n = days.length || 1, bw = (W - pad.l - pad.r) / n;
   const qmax = Math.max(HIGH_WATER * 1.2, ...days.map((d) => d.river ?? 0));
   const X = (i) => pad.l + i * bw, Yp = (v) => pad.t + (1 - v) * (H - pad.t - pad.b), Yq = (v) => pad.t + (1 - v / qmax) * (H - pad.t - pad.b);
-  const bars = days.map((d, i) => `<rect class="${(d.river ?? 0) >= HIGH_WATER ? "hit" : "rainbar"}" x="${X(i) + 1}" width="${Math.max(1, bw - 2)}" y="${Yp(d.p)}" height="${Yp(0) - Yp(d.p)}" rx="1.5" opacity=".85"/>`).join("");
+  const hit = (i) => (days[i]?.river ?? 0) >= HIGH_WATER || (days[i + 1]?.river ?? 0) >= HIGH_WATER;
+  const bars = days.map((d, i) => `<rect class="${hit(i) ? "hit" : "rainbar"}" x="${X(i) + 1}" width="${Math.max(1, bw - 2)}" y="${Yp(d.p)}" height="${Yp(0) - Yp(d.p)}" rx="1.5" opacity=".85"/>`).join("");
   const rv = days.filter((d) => d.river != null);
   const line = days.map((d, i) => (d.river == null ? "" : `${rv.length && days.indexOf(rv[0]) === i ? "M" : "L"}${(X(i) + bw / 2).toFixed(1)},${Yq(d.river).toFixed(1)}`)).join("");
   const xl = days.map((d, i) => (i % 7 === 0 ? `<text x="${X(i)}" y="${H - 4}">${md(d.date)}</text>` : "")).join("");
@@ -279,7 +281,7 @@ function renderModel(D) {
   const top = past.reduce((a, d) => (d.p > (a?.p ?? -1) ? d : a), null);
   const rv = past.filter((d) => d.river != null), peak = rv.reduce((a, d) => (d.river > (a?.river ?? -1) ? d : a), null);
   $("hindcastNote").textContent = D.live
-    ? `Bars: the model's score for each day using measured rain (red if the river did cross the line). Line: the river's daily average. Highest score: ${top ? `${pct(top.p)}% on ${md(top.date)}` : "n/a"}. ${peak ? `River peak: ${peak.river.toFixed(1)} m³/s on ${md(peak.date)}.` : "River readings unavailable."}`
+    ? `Bars: the model's score for each day using measured rain (red when the river crossed the line that day or the next). Line: the river's daily average. Highest score: ${top ? `${pct(top.p)}% on ${md(top.date)}` : "n/a"}. ${peak ? `River peak: ${peak.river.toFixed(1)} m³/s on ${md(peak.date)}.` : "River readings unavailable."}`
     : "Replay: bars show the model's score for the weeks before the 16 July 2024 storm.";
 
   if (!D.live) return;
