@@ -306,7 +306,7 @@ function show(view) {
   document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === view)));
   document.querySelectorAll(".view").forEach((v) => { const on = v.id === `view-${view}`; v.hidden = !on; if (on) { v.classList.remove("enter"); void v.offsetWidth; v.classList.add("enter"); } });
   $("viewTitle").textContent = TITLES[view];
-  if (location.hash !== `#${view}`) history.replaceState(null, "", `#${view}`);
+  try { if (location.hash !== `#${view}`) history.replaceState(null, "", location.pathname + location.search + `#${view}`); } catch { /* embedded preview */ }
   if (view === "forecast" || view === "model") render(); // charts need visible size
 }
 document.querySelectorAll(".tabs button").forEach((b) => (b.onclick = () => show(b.dataset.view)));
