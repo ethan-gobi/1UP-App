@@ -1,0 +1,28 @@
+{
+ "setup": "Target: Todmorden 02HC024 daily mean >= 20 m3/s today or tomorrow. Train 2000-2015, alert threshold picked on 2016-2019, scored once on 2020-2023 (1460 days, 44 positive days, 20 high-water events). Rain = mean of ECCC stations 6158355, 615S001, 6158733/6158731. Other weather = Open-Meteo archive at 43.75,-79.37. Next-day rain is the measured value (a perfect forecast); live forecasts will be worse.",
+ "weatherModel": {
+  "auc": 0.963, "brier": 0.016,
+  "dayLevelAt0.35": {"tp": 27, "fp": 16, "fn": 17, "accuracy": 0.977, "recall": 0.614, "precision": 0.628},
+  "events": {
+   "0.10": {"caughtAhead": 18, "caughtByDay": 20, "falseAlarmDaysPerYear": 20.8},
+   "0.15 (Watch)": {"caughtAhead": 16, "caughtByDay": 20, "falseAlarmDaysPerYear": 13.3},
+   "0.20": {"caughtAhead": 16, "caughtByDay": 20, "falseAlarmDaysPerYear": 10.3},
+   "0.30 (Warning)": {"caughtAhead": 13, "caughtByDay": 18, "falseAlarmDaysPerYear": 5.3},
+   "0.40": {"caughtAhead": 10, "caughtByDay": 14, "falseAlarmDaysPerYear": 2.8},
+   "0.50": {"caughtAhead": 5, "caughtByDay": 12, "falseAlarmDaysPerYear": 1.3}
+  }
+ },
+ "weatherPlusGaugeModel": {"auc": 0.970, "note": "Adding yesterday's river flow did not improve event catches at Watch or Warning, so the app ships the weather-only model and shows the gauge separately."},
+ "humidityOnlyModel": {"auc": 0.807, "at0.10": {"caughtAhead": 7, "caughtByDay": 15, "falseAlarmDaysPerYear": 44.0}},
+ "rainOnlyModel": {"auc": 0.958, "at0.20": {"caughtAhead": 15, "caughtByDay": 18, "falseAlarmDaysPerYear": 9.3}},
+ "teamRules": {
+  "humidityOver75": {"tp": 44, "fp": 1255, "fn": 0, "accuracy": 0.140},
+  "humidityOver80": {"tp": 44, "fp": 1145, "fn": 0, "accuracy": 0.216},
+  "humidityOver75In5hBeforeRain": {"tp": 37, "fp": 336, "fn": 7, "accuracy": 0.765},
+  "rain20mm": {"tp": 14, "fp": 12, "fn": 30, "accuracy": 0.971},
+  "neverWarn": {"accuracy": 0.970}
+ },
+ "fullHistory2000_2023": {"humidityOver75FiresOnShareOfDays": 0.89},
+ "after2023SpotChecks": {"2024-07-15": 0.95, "2024-07-16": 0.89, "2024-08-16": 0.28, "2024-08-17": 0.85, "2026-09-01": 0.16, "2026-09-02": 0.24},
+ "rainSourceNote": "First attempt used grid rain only and caught far fewer summer floods: the grid shows 12 mm on 2013-07-08 when Pearson logged 126 mm."
+}
