@@ -29,7 +29,7 @@ gantt
     Pitch to judges                           :milestone, m1, 2026-12-14, 0d
 
     section 3. Pilot set-up (2027)
-    Approvals, Copp Hall deal, insurance      :a1, 2027-01-04, 5w
+    Approvals, Copp Hall + 2 backups, insurance :a1, 2027-01-04, 5w
     Build and test the carts                  :a2, 2027-01-11, 10w
     Website finished ($100)                   :a3, 2027-01-04, 8w
     Drills and training                       :a4, 2027-03-15, 5w
@@ -42,7 +42,7 @@ gantt
 
     section 5. Year two (2028)
     Fixes from the review, refresher drills   :c1, 2028-01-10, 2028-04-15
-    Second season (reserve $29,783.89)        :c2, 2028-04-22, 2028-10-28
+    Second season (reserve $18,795.77)        :c2, 2028-04-22, 2028-10-28
     Handover to Evergreen                     :c3, 2028-11-01, 2028-12-15
     Project ends                              :milestone, m4, 2028-12-15, 0d
 ```
@@ -55,7 +55,7 @@ gantt
 | 2. Design and pitch | 18 Nov to mid-Dec 2026 | Unified plan, repo and research summary. Hogan's push-bar cart and canopy renders. The working demo website. The $100K budget and this timeline. Then the deck and rehearsals before the judges. | Gopi, Hogan, Codex, Claude |
 | 3. Pilot set-up | Jan to mid-Apr 2027 | See the pilot detail below. | Team with Evergreen |
 | 4. Pilot season | Late Apr to Dec 2027 | See the pilot detail below. | Team with Evergreen and vendors |
-| 5. Year two | 2028 (only if December 2027 says go) | Apply fixes from the review, run refresher drills before spring, then a second season paid from the $29,783.89 reserve. Hand the carts, website and checklists to Evergreen by December 2028. | Evergreen, with the team handing over |
+| 5. Year two | 2028 (only if December 2027 says go) | Apply fixes from the review, run refresher drills before spring, then a second season paid from the $18,795.77 reserve. Hand the carts, website and checklists to Evergreen by December 2028. | Evergreen, with the team handing over |
 
 ## Pilot detail (2027)
 
@@ -65,13 +65,13 @@ gantt
 | 2. Cart and canopy | Jan to Mar (10 weeks) | Lock Hogan's push-bar cart design. A professional checks stability and accessibility. Build and load-test the prototype, then build the second cart and buy canopies, stock and card readers. | Materials $7,838; design review $3,600; fabrication $7,200 |
 | 3. Website | Jan to Mar (8 weeks, in parallel) | Codex finishes the outage fixes and approval records. The team tests the site with users who rely on large print and screen readers. A domain goes live on free hosting. | Website $100 (student hours in kind) |
 | 4. Drills and training | Mid-Mar to mid-Apr (5 weeks) | Train staff and vendors. Run 4 timed drills, comparing the cart with a plain folding table and bins. Put signs and QR cards up at the Brick Works and Copp Hall. | Coordination $4,400; trials $1,030; outreach $1,500 |
-| 5. Pickup season | Late Apr to Oct (27 weeks) | 12 booked market days at Copp Hall, plus a pickup whenever a flood closes the shop. Inspect the carts monthly. | Hall $19,200; staffing $3,072; van $2,160; inspections $864 |
-| 6. Review | Nov 2027 (4 weeks) | Compare sales, drill times and costs with the plan. Decide whether to release the year-two reserve, change the plan or stop. | Year-two reserve $29,783.89 held until this point |
+| 5. Pickup season | Late Apr to Oct (27 weeks) | 12 booked market days at Copp Hall, plus a pickup whenever a flood closes the shop. Inspect the carts monthly. | Hall $19,200; backup hosts $8,840; staffing $3,072; van $2,160; inspections $864 |
+| 6. Review | Nov 2027 (4 weeks) | Compare sales, drill times and costs with the plan. Decide whether to release the year-two reserve, change the plan or stop. | Year-two reserve $18,795.77 held until this point |
 
 ## Checkpoints that can stop or change the plan
 
 - **Mid-December 2026, the pitch:** the judges' feedback goes into the plan before any money is spent.
-- **End of January 2027:** no written answer from the church means we look for a second host before building anything.
+- **End of January 2027:** no written answer from Copp Hall means a backup host (Yorkminster Park or Church of the Redeemer) becomes the main host before anything is built.
 - **Mid-March:** if the prototype fails its stability or doorway test, fix it before drills start, or use the folding table and bins for this season.
 - **Mid-April:** if the cart isn't faster or safer than a folding table and bins in the drills, build no more and run the season with the cheaper setup.
 - **December 2027:** the reserve is released only if the stall was used and the drills passed.

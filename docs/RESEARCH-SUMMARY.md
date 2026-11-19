@@ -6,7 +6,7 @@
 
 - The Evergreen Brick Works has flooded **three times in about a dozen years** (2013, July 16, 2024, Sept 2, 2026). Its flood design protects the buildings, **not the stock on the ground floor**.
 - The team's chosen solution is the **Fold-Out Garden Market**. A small reserve of stock lives in a cabinet at a dry host outside the floodplain, and during a closure the cabinet folds open into a counter so customers can still pick up reserved orders.
-- **Budget: CAD $100,000, website capped at $100.** Year one costs **$70,116.11** (hall at the higher $200/h rate, 10% contingency), the website $100, and **$29,783.89** is held as a year-two reserve. See [BUDGET.md](BUDGET.md). (The earlier $61,330.51 plan is superseded.)
+- **Budget: CAD $100,000, website capped at $100.** Year one costs **$81,104.23** (hall at the higher $200/h rate, 10% contingency), the website $100, and **$18,795.77** is held as a year-two reserve. See [BUDGET.md](BUDGET.md). (The earlier $61,330.51 plan is superseded.)
 - **Biggest unknown:** the proposed host, Copp Hall, has not agreed to anything, and its current prices are not published.
 
 ## 2. The site and its floods
@@ -52,6 +52,8 @@ What we kept from the earlier shelf plan: staff approve every public message, wa
 | Prices | The current page lists **no prices** ("contact for a quote"). The 2024 schedule had $100/h (up to 30 people) and $200/h (over 30), plus weekend custodial fees |
 | Short-notice and weekend access | Unknown. **Until the church confirms, plan for scheduled pop-ups only** |
 | Agreement | None. The church has not been contacted |
+
+**Backup dry hosts** (added 2026-11-19): Yorkminster Park Baptist Church, 1585 Yonge St (Friendship Room $50 to $100/h, fully accessible, St Clair station), and Church of the Redeemer, 162 Bloor St W (Parish Hall, elevator from the Avenue Rd ramp, Bay station, prices by quote). Both are well outside the Don floodplain. See [BUDGET.md](BUDGET.md).
 
 Contact: 416.924.0725 · churchoffice@rosedaleunited.org
 
