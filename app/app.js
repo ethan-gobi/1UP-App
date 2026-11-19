@@ -190,8 +190,9 @@ function renderForecast(D) {
 }
 
 // ---------- charts (plain SVG) ----------
-const W = 600;
+let W = 600; // set to the chart's real width so text is never stretched
 function lineChart(el, pts, { thr, thrLabel } = {}) {
+  W = Math.max(280, el.clientWidth || 600);
   if (!pts.length) { el.innerHTML = ""; return; }
   const H = el.clientHeight || 150, pad = { l: 34, r: 8, t: 10, b: 22 };
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
@@ -202,10 +203,11 @@ function lineChart(el, pts, { thr, thrLabel } = {}) {
   const days = []; for (let t = Math.ceil(x0 / 864e5) * 864e5; t <= x1; t += 864e5) days.push(t);
   const xl = days.map((t) => `<text x="${X(t)}" y="${H - 4}" text-anchor="middle">${new Date(t).toLocaleDateString("en-CA", { weekday: "short", timeZone: TZ })}</text>`).join("");
   const th = thr != null ? `<line class="thr" x1="${pad.l}" x2="${W - pad.r}" y1="${Y(thr)}" y2="${Y(thr)}"/><text class="thrlabel" x="${W - pad.r}" y="${Y(thr) - 5}" text-anchor="end">${thrLabel}</text>` : "";
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${ticks}${th}<path class="area" d="${d}L${X(x1)},${Y(0)}L${X(x0)},${Y(0)}Z"/><path class="line" d="${d}" vector-effect="non-scaling-stroke"/>${xl}</svg>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}">${ticks}${th}<path class="area" d="${d}L${X(x1)},${Y(0)}L${X(x0)},${Y(0)}Z"/><path class="line" d="${d}" vector-effect="non-scaling-stroke"/>${xl}</svg>`;
 }
 
 function hourChart(el, hrs) {
+  W = Math.max(280, el.clientWidth || 600);
   const H = el.clientHeight || 190, pad = { l: 34, r: 34, t: 10, b: 22 }, n = hrs.length || 1;
   const pmax = Math.max(4, ...hrs.map((h) => h.p)) * 1.1, bw = (W - pad.l - pad.r) / n;
   const X = (i) => pad.l + i * bw, Yp = (v) => pad.t + (1 - v / pmax) * (H - pad.t - pad.b), Yr = (v) => pad.t + (1 - v / 100) * (H - pad.t - pad.b);
@@ -214,10 +216,11 @@ function hourChart(el, hrs) {
   const rh = hrs.map((h, i) => `${i ? "L" : "M"}${(X(i) + bw / 2).toFixed(1)},${Yr(h.rh ?? 0).toFixed(1)}`).join("");
   const xl = hrs.map((h, i) => (h.tm.endsWith("T00:00") ? `<line class="now" x1="${X(i)}" x2="${X(i)}" y1="${pad.t}" y2="${H - pad.b}"/><text x="${X(i) + 4}" y="${H - 4}">${dow(h.tm.slice(0, 10))}</text>` : "")).join("");
   const axes = `<text x="${pad.l - 6}" y="${Yp(0) + 4}" text-anchor="end">0</text><text x="${pad.l - 6}" y="${Yp(pmax / 1.1) + 4}" text-anchor="end">${(pmax / 1.1).toFixed(0)}mm</text><text x="${W - pad.r + 6}" y="${Yr(75) + 4}">75%</text><text x="${W - pad.r + 6}" y="${Yr(100) + 8}">100%</text>`;
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line class="grid" x1="${pad.l}" x2="${W - pad.r}" y1="${Yp(0)}" y2="${Yp(0)}"/>${band}${bars}<path class="rh" d="${rh}" vector-effect="non-scaling-stroke"/>${xl}${axes}</svg>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}"><line class="grid" x1="${pad.l}" x2="${W - pad.r}" y1="${Yp(0)}" y2="${Yp(0)}"/>${band}${bars}<path class="rh" d="${rh}" vector-effect="non-scaling-stroke"/>${xl}${axes}</svg>`;
 }
 
 function hindcastChart(el, days) {
+  W = Math.max(280, el.clientWidth || 600);
   const H = el.clientHeight || 190, pad = { l: 34, r: 40, t: 10, b: 22 }, n = days.length || 1, bw = (W - pad.l - pad.r) / n;
   const qmax = Math.max(HIGH_WATER * 1.2, ...days.map((d) => d.river ?? 0));
   const X = (i) => pad.l + i * bw, Yp = (v) => pad.t + (1 - v) * (H - pad.t - pad.b), Yq = (v) => pad.t + (1 - v / qmax) * (H - pad.t - pad.b);
@@ -226,7 +229,7 @@ function hindcastChart(el, days) {
   const rv = days.filter((d) => d.river != null);
   const line = days.map((d, i) => (d.river == null ? "" : `${rv.length && days.indexOf(rv[0]) === i ? "M" : "L"}${(X(i) + bw / 2).toFixed(1)},${Yq(d.river).toFixed(1)}`)).join("");
   const xl = days.map((d, i) => (i % 7 === 0 ? `<text x="${X(i)}" y="${H - 4}">${md(d.date)}</text>` : "")).join("");
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}">
     <line class="grid" x1="${pad.l}" x2="${W - pad.r}" y1="${Yp(0)}" y2="${Yp(0)}"/><line class="grid" x1="${pad.l}" x2="${W - pad.r}" y1="${Yp(0.5)}" y2="${Yp(0.5)}"/>
     <text x="${pad.l - 6}" y="${Yp(0) + 4}" text-anchor="end">0%</text><text x="${pad.l - 6}" y="${Yp(0.5) + 4}" text-anchor="end">50%</text>
     <line class="thr" x1="${pad.l}" x2="${W - pad.r}" y1="${Yq(HIGH_WATER)}" y2="${Yq(HIGH_WATER)}"/><text class="thrlabel" x="${W - pad.r + 4}" y="${Yq(HIGH_WATER) + 4}">${HIGH_WATER} m³/s</text>
@@ -260,7 +263,9 @@ function renderTasks(D) {
   updateCount(D);
 
   $("week").innerHTML = D.days.filter((d) => d.date >= D.today && d.date <= addDays(D.today, 6)).map((d) => {
-    const l = dayLevel(d, D), list = tasksFor(l, S.role, d.date);
+    const l = dayLevel(d, D);
+    let list = tasksFor(l, S.role, d.date);
+    if (l === "normal") { const special = list.filter(([w]) => WEEKDAYS.includes(w)); list = [["", "Routine checks"], ...special]; }
     return `<li><span><b>${d.date === D.today ? "Today" : dow(d.date, "long")}</b><br><span class="muted small">${md(d.date)} · ${pct(d.p)}%</span></span>
       <span class="lv lv-${l}">${LEVELS[l].label}</span><span class="what">${list.map(([w, t]) => `<span class="muted small">${w}</span> ${t}`).join("<br>")}</span></li>`;
   }).join("");
@@ -315,15 +320,17 @@ document.querySelector(".tabs").addEventListener("keydown", (e) => {
   if (i < 0 || !["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
   e.preventDefault(); const n = tabs[(i + (e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); show(n.dataset.view);
 });
-function setRole(r) { S.role = r; store.set("fd-role", r); $("role").value = r; $("roleM").value = r; render(); }
+function setRole(r) { S.role = r; store.set("fd-role", r); $("role").value = r; $("roleM").value = r; pickup.update(S.level, r); render(); }
 $("role").onchange = (e) => setRole(e.target.value);
 $("roleM").onchange = (e) => setRole(e.target.value);
 $("role").value = $("roleM").value = S.role;
 $("refresh").onclick = load;
 $("replay").onclick = () => { S.replay = !S.replay; $("replay").setAttribute("aria-pressed", String(S.replay)); $("replay").textContent = S.replay ? "Back to live" : "Replay July 2024 storm"; load(); };
+addEventListener("hashchange", () => { const v = location.hash.slice(1); if (TITLES[v] && v !== S.view) show(v); });
 let resizeT; addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(render, 150); });
 
 const pickup = mountPickup({ panel: $("pickupPanel"), say: (m) => ($("message").textContent = m) });
+pickup.update(S.level, S.role);
 show(["forecast", "tasks", "pickup", "model"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "forecast");
 if (new URLSearchParams(location.search).has("replay")) $("replay").click(); else load();
 setInterval(() => { if (!S.replay && document.visibilityState === "visible") load(); }, 15 * 60 * 1000);
