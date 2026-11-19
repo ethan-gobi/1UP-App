@@ -137,6 +137,13 @@ function renderForecast(D) {
     recovery: "Water is down. Recovery under way.",
   }[lv];
   $("headline").textContent = head;
+  $("speech").textContent = {
+    normal: "All calm in the valley today. Go enjoy the market!",
+    watch: "Ooh, clouds are gathering. Let's get our bags packed, just in case.",
+    warning: "Eek! Big rain is coming. Time to fold up the market and head somewhere dry.",
+    flood: "The river is up! Stay out of the valley. Pickup is at Copp Hall.",
+    recovery: "Phew, the water's going down. Let's tidy up and reopen soon!",
+  }[lv];
   $("subline").textContent = `${pct(t.p)}% chance the Don at Todmorden runs high today or tomorrow. ${LEVELS[lv].summary}`;
 
   // Drivers: the inputs pushing today's score up the most, in plain words.

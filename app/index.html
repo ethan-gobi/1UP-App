@@ -5,14 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Brick Works Flood Desk</title>
 <meta name="description" content="Live Don River flood risk for Evergreen Brick Works, the daily flood protocol for staff, vendors, event clients and visitors, and the Fold-Out Market pickup.">
-<meta name="theme-color" content="#f5f6f4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
-<link rel="preload" href="fonts/instrument-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/instrument-sans-600.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#bfe9ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#06223f" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6b66'/%3E%3Cpath d='M6 19c3 0 3-2 5-2s2 2 5 2 3-2 5-2 2 2 5 2' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 6l5 8h-10z' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="sky" aria-hidden="true">
+  <i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i>
+  <span class="bubble" style="--x:6%;--s:28px;--d:24s;--o:0s"></span><span class="bubble" style="--x:18%;--s:14px;--d:19s;--o:-6s"></span>
+  <span class="bubble" style="--x:31%;--s:40px;--d:30s;--o:-12s"></span><span class="bubble" style="--x:47%;--s:18px;--d:22s;--o:-3s"></span>
+  <span class="bubble" style="--x:62%;--s:34px;--d:27s;--o:-17s"></span><span class="bubble" style="--x:74%;--s:12px;--d:18s;--o:-9s"></span>
+  <span class="bubble" style="--x:86%;--s:46px;--d:33s;--o:-21s"></span><span class="bubble" style="--x:94%;--s:20px;--d:21s;--o:-14s"></span>
+  <i class="hill h1"></i><i class="hill h2"></i>
+</div>
 <a class="skip" href="#main">Skip to content</a>
 
 <div class="shell">
@@ -71,6 +78,21 @@
     <!-- FORECAST -->
     <section class="view" id="view-forecast" role="tabpanel" aria-labelledby="tab-forecast">
       <div class="status card" id="status" data-level="normal" aria-live="polite">
+        <svg class="drip" viewBox="0 0 100 120" aria-hidden="true">
+          <defs>
+            <linearGradient id="dripBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bff1ff"/><stop offset=".55" stop-color="#3cc4f2"/><stop offset="1" stop-color="#0a8fd0"/></linearGradient>
+            <radialGradient id="dripShine" cx=".35" cy=".3" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          </defs>
+          <path class="drip-body" d="M50 4C50 4 12 52 12 76a38 38 0 0 0 76 0C88 52 50 4 50 4Z" fill="url(#dripBody)"/>
+          <ellipse cx="36" cy="58" rx="14" ry="20" fill="url(#dripShine)"/>
+          <ellipse class="cheek" cx="30" cy="88" rx="7" ry="4.5"/><ellipse class="cheek" cx="70" cy="88" rx="7" ry="4.5"/>
+          <g class="eyes"><ellipse cx="38" cy="78" rx="5" ry="6.5"/><ellipse cx="62" cy="78" rx="5" ry="6.5"/><circle class="glint" cx="40" cy="75.5" r="1.8"/><circle class="glint" cx="64" cy="75.5" r="1.8"/></g>
+          <path class="mouth m-happy" d="M43 90q7 7 14 0"/>
+          <ellipse class="mouth m-o" cx="50" cy="93" rx="4" ry="4.5"/>
+          <path class="mouth m-worry" d="M42 95q4-4 8 0t8 0"/>
+          <g class="sweat"><path d="M84 52c0 0-6 8-6 12a6 6 0 0 0 12 0c0-4-6-12-6-12Z"/></g>
+        </svg>
+        <p class="speech" id="speech">Hi, I'm Drip! Checking the river…</p>
         <div class="status-main">
           <div class="dial" aria-hidden="true">
             <svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle class="arc" id="dialArc" cx="60" cy="60" r="52" pathLength="100"/></svg>
