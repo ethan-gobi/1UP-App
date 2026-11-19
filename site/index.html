@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fold-Out Garden Market · Pickup</title>
+<meta name="description" content="Flood pickup for the Evergreen Brick Works Garden Market: one update tells staff, vendors and visitors where to go.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span><span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span></div>
+<svg class="hills" aria-hidden="true" viewBox="0 0 1440 220" preserveAspectRatio="none"><path d="M0 120 C240 40 520 60 760 110 C1000 160 1220 60 1440 90 V220 H0Z" fill="#a8dc6a"/><path d="M0 160 C300 100 600 140 900 170 C1150 195 1300 130 1440 140 V220 H0Z" fill="#6cbf3f"/></svg>
+
+<header class="top">
+  <p class="eyebrow">1UP &nbsp;/&nbsp; YELLOW ZONE</p>
+  <button id="reset" class="ghost" type="button">Restart demo</button>
+</header>
+
+<main>
+  <div id="alert" class="alert" role="alert" hidden></div>
+
+  <section class="hero">
+    <div class="glass hero-copy">
+      <h1>The Fold-Out<br>Garden Market</h1>
+      <p class="lede">A pop-up stall that packs into one rolling unit. When the shop floods, one update tells everyone where to go.</p>
+      <div id="notice" class="notice" hidden></div>
+    </div>
+    <figure class="glass hero-art"><img src="img/hero.webp" width="500" height="572" alt="Green canopy over the rolling market cart, open for sales"></figure>
+  </section>
+
+  <section class="glass status" aria-label="Pickup status">
+    <div class="count"><strong id="available">–</strong><span>seed packets available</span></div>
+    <dl class="where">
+      <div><dt>Pickup at</dt><dd id="hostName">Not confirmed yet</dd><dd class="muted" id="hostAddr"></dd></div>
+      <div><dt>Pickup window</dt><dd id="hostWindow">–</dd></div>
+      <div><dt>Status</dt><dd><span id="phase" class="badge">Checking…</span></dd></div>
+    </dl>
+  </section>
+
+  <h2 class="section-title">One update tells everyone where to go</h2>
+  <nav class="roles" aria-label="Choose who you are">
+    <button type="button" data-role="staff" aria-pressed="true"><b>Staff</b><small>Maya</small></button>
+    <button type="button" data-role="vendor" aria-pressed="false"><b>Vendor</b><small>Aisha</small></button>
+    <button type="button" data-role="customer" aria-pressed="false"><b>Visitors</b><small>Daniel and Marcus</small></button>
+  </nav>
+
+  <section id="staff" class="glass panel">
+    <h3><span class="num">1</span> Post an early closure notice</h3>
+    <p>Tell vendors and visitors the shop is closing before the water arrives.</p>
+    <button id="closeShop" class="primary" type="button">Post closure notice</button>
+    <hr>
+    <h3><span class="num">2</span> Confirm the location and hours</h3>
+    <p>A pickup opens only after staff confirm the location and hours.</p>
+    <fieldset class="hosts">
+      <legend>Dry host, off the floodplain</legend>
+      <label class="host"><input type="radio" name="host" value="copp" checked><span><b>Copp Hall, Rosedale United</b><small>159 Roxborough Dr · west entrance lift · main host</small></span></label>
+      <label class="host"><input type="radio" name="host" value="yorkminster"><span><b>Yorkminster Park Baptist</b><small>1585 Yonge St · St Clair station · backup 1</small></span></label>
+      <label class="host"><input type="radio" name="host" value="redeemer"><span><b>Church of the Redeemer</b><small>162 Bloor St W · elevator from Avenue Rd ramp · backup 2</small></span></label>
+    </fieldset>
+    <label class="field">Pickup window <input id="window" value="Saturday, 10 am to 4 pm" maxlength="40"></label>
+    <button id="approve" class="primary" type="button">Confirm location and hours</button>
+    <p class="hint" id="hint-staff"></p>
+    <hr>
+    <h3><span class="num">!</span> Evacuation alert</h3>
+    <p>Tells everyone to leave immediately. Packing, reservations and pickups stop.</p>
+    <button id="evacuate" class="danger" type="button">Send evacuation alert</button>
+    <button id="allClear" class="ghost" type="button">All clear</button>
+  </section>
+
+  <section id="vendor" class="glass panel" hidden>
+    <h3><span class="num">1</span> Pack down the stall</h3>
+    <p>Two people, one rolling unit. Time it to beat the folding-table drill.</p>
+    <ol class="pack">
+      <li><figure><img src="img/step-sell.webp" width="417" height="572" alt="Stall open under the canopy"></figure><label><input type="checkbox" class="pack-step"> Pack the stock</label><small>Lower the seed trays into the counter and latch the lid.</small></li>
+      <li><figure><img src="img/step-fold.webp" width="417" height="572" alt="Canopy frame folding in"></figure><label><input type="checkbox" class="pack-step"> Fold the tent</label><small>Lower the canopy, fold the frame and slide it into its bag.</small></li>
+      <li><figure><img src="img/step-roll.webp" width="417" height="572" alt="Tent bag latched to the cart, ready to roll"></figure><label><input type="checkbox" class="pack-step"> Latch and roll</label><small>Seat the bag in the side cradle, close the gold latch and push.</small></li>
+    </ol>
+    <p class="timer"><button id="timerBtn" class="ghost" type="button">Start drill timer</button> <output id="timer">0:00</output></p>
+    <hr>
+    <h3><span class="num">2</span> Count the stock at the approved site</h3>
+    <label class="check-line"><input type="checkbox" class="check"> Brakes set and cart stable</label>
+    <label class="check-line"><input type="checkbox" class="check"> Aisle and step-free route clear</label>
+    <label class="check-line"><input type="checkbox" class="check"> I'm at the approved host, in the confirmed window</label>
+    <label class="field">Seed packets counted <input type="number" id="count" value="12" min="1" max="999"></label>
+    <button id="open" class="primary" type="button">Open pickup</button>
+    <p class="hint" id="hint-open"></p>
+    <hr>
+    <h3><span class="num">3</span> Hand over an order</h3>
+    <label class="field">Pickup code <input id="code" maxlength="8" spellcheck="false" autocomplete="off" placeholder="e.g. 4F2A9C1B"></label>
+    <button id="collect" class="primary" type="button">Confirm collection</button>
+    <details>
+      <summary>Pause or resume pickup</summary>
+      <p>Pause for an outage. Before resuming, check the stock against existing holds.</p>
+      <button id="pause" class="ghost" type="button">Pause pickup</button>
+      <label class="check-line"><input type="checkbox" id="reconciled"> Stock and outstanding holds match</label>
+      <button id="resume" class="primary" type="button">Resume pickup</button>
+    </details>
+  </section>
+
+  <section id="customer" class="glass panel" hidden>
+    <h3>Daniel: reserve a seed packet</h3>
+    <p>Hold one packet. Collect it at the dry host in the pickup window.</p>
+    <button id="reserve" class="primary" type="button">Reserve one packet</button>
+    <p class="hint" id="hint-reserve"></p>
+    <div id="ticket" class="ticket" hidden>
+      <small>Your pickup code</small>
+      <strong id="ticketCode"></strong>
+      <span id="ticketWhere"></span>
+    </div>
+    <hr>
+    <h3>Marcus: share the pickup link</h3>
+    <p>Send the same link to your guests, so everyone sees the same place, hours and count.</p>
+    <button id="share" class="ghost" type="button">Copy pickup link</button>
+  </section>
+
+  <ol id="steps" class="glass steps" aria-label="Demo progress">
+    <li>Closure notice</li><li>Location confirmed</li><li>Stall open</li><li>Packet reserved</li><li>Collected</li>
+  </ol>
+
+  <output id="message" class="toast" role="status" aria-live="polite"></output>
+  <footer>Practice session · sample stock · no real bookings or payments · Milliken Mills High School, Team 3</footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

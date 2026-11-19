@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fold-Out Market · Pickup demo</title>
+<meta name="description" content="A rehearsal of the Fold-Out Garden Market: reserve seeds online and collect them at a dry pop-up while the Brick Works market is closed by flooding.">
+<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Fold-Out Market home">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="4" width="22" height="14" rx="2"/><path d="M5 18h22l-3 9H8z"/><path class="mark-water" d="M2 29c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2 3-2 4-2"/></svg>
+    <span>Fold-Out Market</span>
+  </a>
+  <span class="pill">Pilot demo · sample data</span>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <p class="scenario"><span class="dot" aria-hidden="true"></span>Scenario: the Brick Works Garden Market is closed after overnight flooding</p>
+    <h1 id="hero-title">The shop flooded.<br><em>The seeds didn’t.</em></h1>
+    <p class="lede">Reserve a packet online, then collect it at a dry pop-up across town. One cabinet holds the stock and folds open into the counter.</p>
+
+    <div class="stock" aria-live="polite">
+      <div class="stock-count"><strong id="available">–</strong><span>seed packets ready</span></div>
+      <p id="phase" class="badge">Checking session…</p>
+    </div>
+
+    <dl class="where">
+      <div><dt>Pickup at</dt><dd>Copp Hall, Rosedale United<br><span class="muted">159 Roxborough Drive</span></dd></div>
+      <div><dt>Step-free entry</dt><dd>West entrance lift</dd></div>
+      <div><dt>Practice window</dt><dd>Saturday,<br><span class="nowrap">10 am–4 pm</span></dd></div>
+    </dl>
+    <p class="fineprint">Proposed host. Hours are for rehearsal only.</p>
+  </section>
+
+  <section class="console" aria-labelledby="console-title">
+    <h2 id="console-title">Run the pickup</h2>
+    <ol class="steps" id="steps">
+      <li data-step="1"><span>1</span>Staff approve the site</li>
+      <li data-step="2"><span>2</span>Vendor opens the stall</li>
+      <li data-step="3"><span>3</span>Customer reserves</li>
+      <li data-step="4"><span>4</span>Vendor hands it over</li>
+    </ol>
+
+    <nav class="roles" aria-label="Switch demo role">
+      <button data-role="staff" aria-pressed="true">Staff<small>Maya</small></button>
+      <button data-role="vendor" aria-pressed="false">Vendor<small>Aisha</small></button>
+      <button data-role="customer" aria-pressed="false">Customer<small>Daniel</small></button>
+    </nav>
+
+    <section id="staff" class="panel">
+      <h3>Approve the pickup site</h3>
+      <p>Check the host, the step-free entrance and the hours before anything is public. Reservations stay shut until the vendor finishes the stall check.</p>
+      <ul class="facts">
+        <li>Copp Hall · 159 Roxborough Drive</li>
+        <li>West entrance lift</li>
+        <li>Saturday, 10 am–4 pm</li>
+      </ul>
+      <button id="approve" class="primary">Approve and publish</button>
+      <p class="hint" id="hint-staff"></p>
+    </section>
+
+    <section id="vendor" class="panel" hidden>
+      <h3>Open the stall</h3>
+      <fieldset class="checks">
+        <legend>Safety check before loading the counter</legend>
+        <label><input type="checkbox" class="check"> Wheel brakes set</label>
+        <label><input type="checkbox" class="check"> Both legs braced and locked</label>
+        <label><input type="checkbox" class="check"> Approach and aisle clear</label>
+      </fieldset>
+      <label class="field">Seed packets counted <input type="number" id="count" value="12" min="1" max="999" inputmode="numeric"></label>
+      <button id="open" class="primary">Open for pickup</button>
+      <p class="hint" id="hint-open"></p>
+
+      <div class="sub">
+        <h3>Hand over an order</h3>
+        <label class="field">Pickup code <input id="code" maxlength="8" spellcheck="false" autocomplete="off" autocapitalize="characters" placeholder="7F3A9C21"></label>
+        <button id="collect" class="primary">Confirm collection</button>
+      </div>
+
+      <div class="sub outage">
+        <h3>Outage drill</h3>
+        <p>Lost signal or power? Pause reservations for everyone. Before resuming, count the stock against the holds that are still open.</p>
+        <button id="pause" class="ghost">Pause reservations</button>
+        <label class="inline"><input type="checkbox" id="reconciled"> Stock and open holds match</label>
+        <button id="resume" class="ghost">Resume pickup</button>
+      </div>
+    </section>
+
+    <section id="customer" class="panel" hidden>
+      <h3>Reserve a seed packet</h3>
+      <p>Hold one packet, then show your code at the stall. Pay when you collect.</p>
+      <button id="reserve" class="primary">Reserve one packet</button>
+      <p class="hint" id="hint-reserve"></p>
+      <div id="ticket" class="ticket" hidden>
+        <p class="ticket-label">Your pickup code</p>
+        <strong id="ticketCode"></strong>
+        <p class="ticket-meta">Copp Hall · West entrance · Saturday 10 am–4 pm</p>
+      </div>
+    </section>
+
+    <output id="message" role="status" aria-live="polite"></output>
+  </section>
+</main>
+
+<footer class="foot">Local rehearsal · sample stock · no real bookings or payments · Evergreen Brick Works stays in charge of closures and re-entry.</footer>
+<script src="/app.js"></script>
+</body>
+</html>
