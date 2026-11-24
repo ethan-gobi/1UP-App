@@ -126,27 +126,33 @@ Sources: `model/README.md`, `model/results.json`, `app/README.md` in [PR #12](ht
 
 ## 6. Case study: the morning of 16 July 2024
 
-*We used only what staff could have known by **07:00**: measured rain up to the day before, and forecasts issued at least 24 hours ahead.*
+*Corrected 24 Nov 2026. An earlier version said Flood Desk showed "Watch at 7 a.m., ahead of TRCA". **Don't use that claim.** Forecasts issued the day before showed only 4–7 mm (two models 18–25 mm), so no forecast gave a real early warning. A borderline 29% score from one replay came mostly from rain already measured on 15 July, one point under Warning.*
 
-| Time | Source | What it said |
+| Time | Source | What happened |
 |---|---|---|
-| 15 Jul | Rain gauges | **20.8 mm** fell (average of the three stations) |
-| 15 Jul | TRCA | **Water Safety** statement, the lowest level ("stay away from rivers") |
-| 16 Jul, 07:00 | **Flood Desk** | **Watch, 29%** (Warning starts at 30%). The forecast said only **7.7 mm** |
-| 16 Jul, morning | Environment Canada | Rainfall warning in effect. **Issue time unknown** |
-| Just before 09:00 | — | Storm starts. About 100 mm falls, with 96 mm at Pearson by 2:30 p.m. |
-| 16 Jul, 09:35 | TRCA | Upgraded to **Flood Watch** |
-| 16 Jul, afternoon | TRCA | **Flood Warning**. Flooding already under way at Todmorden |
+| 15 Jul, afternoon | Rain gauges | Steady rain: 25 mm at Pearson |
+| 15 Jul | TRCA | Yellow **Water Safety** statement |
+| 15 Jul | Weather models | Forecasts for the 16th: **4–7 mm**, two models 18–25 mm |
+| 16 Jul, about 09:00 | TRCA rain gauge at the Brick Works | Rain starts |
+| 16 Jul, 09:35 | TRCA | **Flood Watch** |
+| 16 Jul, 11:00–11:30 | TRCA gauge, Don at Todmorden | Water level rises **78.9 → 80.0 m** (1.1 m in 30 minutes) |
+| 16 Jul, 11:35 | TRCA | **Flood Warning**. TRCA **phoned the Brick Works** |
+| 16 Jul, by 2:30 p.m. | Pearson | 96 mm (97.8 mm for the day) |
 
 **What this shows**
-- At opening time Flood Desk was **one level above TRCA**, about **2.5 hours before** TRCA's Flood Watch.
-- Under the pilot rule, staff would have opened **sample-only**, so most of the stock would already have been packed and dry when the water came.
+- **No forecast saw it coming.** The storm arrived on the day, with no useful warning the day before.
+- **The river gives minutes, not hours.** Rain started around 09:00, and the Don rose a metre in half an hour at 11:00.
+- **TRCA's system worked.** It issued the Watch at 09:35, the Warning at 11:35, and phoned the site.
 
-**What it doesn't show (say this out loud)**
-- Flood Desk **did not predict the storm.** The forecast said 8 mm and about 100 mm fell. The Watch came mostly from the wet day before.
-- It was **one event**, and it sat **one point under Warning**.
-- We **can't say** it beat Environment Canada, because we don't know when the rainfall warning went out.
-- **Agreed wording:** "July 16 shows how staff would use a Watch. It doesn't prove the model changes decisions. The pilot log will."
+**So the pitch is:** Flood Desk does **not** try to beat TRCA. It **works alongside TRCA**:
+- It watches **live rain and upstream river gauges**.
+- It runs the **Brick Works checklist** for each person (pack the stock, close the market, move people) the moment the river starts to rise.
+- That way the minutes between "rain starts" and "water arrives" are used, not lost.
+- The sample-only display means most stock is already packed before those minutes start.
+
+**Don't say:** "Flood Desk predicted the July 2024 flood" or "Flood Desk beat TRCA."
+
+Sources: [TRCA event report, Sept 2024](https://pub-trca.escribemeetings.com/filestream.ashx?DocumentId=17893), [TRCA real-time gauges](https://trcagauging.ca/), ECCC Pearson daily data (6158731), [CTV](https://toronto.ctvnews.ca/three-thunderstorms-in-three-hours-more-than-a-month-s-worth-of-rain-fell-in-toronto-1.6966041). Forecast backtest numbers since 2016 are coming from the Flood Desk demo work and will be added here.
 
 **Other checks** (scored afterwards with the rain that actually fell, so hindsight, not forecasts):
 
@@ -170,7 +176,7 @@ Sources: [TRCA event report](https://pub-trca.escribemeetings.com/filestream.ash
 | Question | Honest answer |
 |---|---|
 | Does Flood Desk replace official alerts? | **No.** Staff check both. Official alerts and Evergreen staff always win |
-| Can it predict a thunderstorm? | Not reliably. It depends on the rain forecast, which is its weakest link (16 Jul: forecast 8 mm, actual about 100 mm) |
+| Can it predict a thunderstorm? | No. On 16 Jul 2024 forecasts issued the day before said 4–7 mm, and about 100 mm fell. That's why Flood Desk follows live rain and river gauges on the day |
 | Overnight floods? | The morning check doesn't help. Stock that's already packed away overnight is the protection |
 | How often will it cry wolf? | About 13 Watch days a year with no high water. Each one costs a sample-only morning. The pilot measures how much that costs in sales |
 | Does it predict flooding at the site? | It predicts high water at the gauge (20 m³/s average), about 7 days a year. Short peaks can flood low ground even when the daily average is lower, so the app also shows the live 5-minute gauge |
@@ -265,11 +271,11 @@ We tested eight ideas against four user personas:
 
 1. **Three floods in 12 years:** timeline 2013, 2024, 2026, plus the Garden Market's "considerable losses" and no flood insurance.
 2. **Raising stock isn't enough:** Outward Bound's 3 ft raise, beaten in 2026.
-3. **The morning of 16 July 2024:** the timeline table in Section 6. This is the strongest slide.
+3. **16 July 2024: the river gives minutes:** the timeline table in Section 6, with rain at 09:00, Flood Watch at 09:35, the river up 1.1 m by 11:30 and the Warning at 11:35. This is the strongest slide.
 4. **Flood Desk works on years it never saw:** the held-out table, plus "never warn scores 97%".
 5. **Why not humidity:** over 75% on 89% of days, with 1,255 false alarms.
 6. **Real gauges beat the grid:** 12 mm against 126 mm on 8 Jul 2013.
-7. **Flood Desk demo:** the live app ([PR #12](https://github.com/ethan-gobi/1UP-App/pull/12)). Note that "Replay July 2024" loads the rain that **actually fell**, so it shows Warning, not the 29% forecast view. Say so on the slide. *(A separate thread is making a screen recording.)*
+7. **Flood Desk demo:** the live app ([PR #12](https://github.com/ethan-gobi/1UP-App/pull/12)). Note that "Replay July 2024" loads the rain that **actually fell**. Say on the slide that it's a replay, not a forecast made in advance. *(A separate thread is making a screen recording.)*
 8. **The pilot morning:** the three checks, the sample-only display and the log.
 9. **The ask:** $2,422.46, with $100K as the ceiling and phase two.
 10. **Limits:** the Section 7 table. Judges respect it.
