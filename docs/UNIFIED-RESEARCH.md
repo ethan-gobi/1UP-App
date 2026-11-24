@@ -1,8 +1,8 @@
 # 1UP Yellow Zone: Unified Research
 
-*All research for the 1UP Yellow Zone project, merged from Claude's and Codex's work. Updated 24 Nov 2026. Judging is around 14 Dec 2026. This file replaces older plans and budgets wherever they disagree, and links each fact to its source.*
+*All research for the 1UP Yellow Zone project, merged from Claude's and Codex's work and the school's One Up Official doc. Updated 24 Nov 2026. Judging is around 14 Dec 2026. This file replaces older plans and budgets wherever they disagree, and links each fact to its source.*
 
-**Who this is for:** the script writer and the slide maker. Section 12 lists the slides this research best supports.
+**Who this is for:** the script writer and the slide maker. Section 11 links the existing 5-minute script, and Section 12 lists the slides this research best supports.
 
 ---
 
@@ -193,7 +193,37 @@ Sources: [TRCA event report](https://pub-trca.escribemeetings.com/filestream.ash
 | Ceiling | 100,000.00 |
 | Phase two (costed, **not requested now**) | see Section 9 |
 
-> **Line items for the $2,422.46: to be added.** They're in Hogan's deck. Codex has been asked to post them on [issue #13](https://github.com/ethan-gobi/1UP-App/issues/13). Every slide must show **$2,422.46** as the ask.
+**Line items** (from the school financial workbook, via [One Up Official](../research/one-up-official.md)):
+
+| Phase-one item | Qty | Rate | Before HST | HST | Total |
+|---|---:|---:|---:|---:|---:|
+| Prepare paired displays, replay cases and STOP script (coordinator hours) | 12 | 35.00 | 420.00 | 0.00 | 420.00 |
+| Practice crew, observers and order timer (staff-hours) | 18 | 30.00 | 540.00 | 0.00 | 540.00 |
+| Accessibility reviewer (hours) | 4 | 100.00 | 400.00 | 52.00 | 452.00 |
+| Participant honoraria (12 shoppers) | 12 | 25.00 | 300.00 | 0.00 | 300.00 |
+| Low-cost seed display, trays and mock reserve box | 1 | 65.00 | 65.00 | 8.45 | 73.45 |
+| APEX rechargeable megaphone ([Long & McQuade](https://www.long-mcquade.com/144136/Pro-Audio-Recording/PA-Speaker-Cabinets/Apex-Electronics/MegaUSB-Square-Horn-Megaphone.htm)) | 1 | 109.99 | 109.99 | 14.30 | 124.29 |
+| Printed directions and reusable floor stands | 2 | 35.00 | 70.00 | 9.10 | 79.10 |
+| Plain-language drill cards and large-print copies | 1 | 40.00 | 40.00 | 5.20 | 45.20 |
+| Local fieldwork transit ([TTC youth fare](https://www.ttc.ca/Fares-and-passes)) | 12 | 2.35 | 28.20 | 0.00 | 28.20 |
+| Score shopper outcomes and historical trigger decisions | 4 | 35.00 | 140.00 | 0.00 | 140.00 |
+| Official alert and model replay, classroom space and equipment | | | | | 0.00 (school resource) |
+| **Direct costs** | | | | | **2,202.24** |
+| Contingency (10%) | | | | | 220.22 |
+| **Total ask** | | | | | **2,422.46** |
+
+**By activity:**
+- Shopper and display comparison: $1,460.85
+- Comparing official alerts with and without the model: $270.00
+- STOP and first-turn drill: $471.39
+- Contingency: $220.22
+
+**Optional fixes, each released only if a problem remains after a cheaper change:**
+- Audio: $1,465.50
+- Directions and accessibility: $1,118.70
+- Reserve-stock equipment: $1,396.93
+
+The maximum with all three is **$6,403.59**. Only $2,422.46 is requested now.
 
 **Out of date, don't use on slides:**
 - $61,330.51
@@ -261,11 +291,32 @@ We tested eight ideas against four user personas:
 
 ---
 
-## 11. Earlier team research: "One Up Official" Google Doc
+## 11. School research and script: "One Up Official" (MMHS Team 3)
 
-> **Slot reserved.** This doc used to be named after Lucas Chen Yam. Codex has been asked to upload it to the repo as `research/one-up-official.md`. When it arrives, its findings will be merged into the sections above, and anything that conflicts with Section 1 will be marked as superseded.
+The full school document is in [One Up Official](../research/one-up-official.md) ([PR #14](https://github.com/ethan-gobi/1UP-App/pull/14)). It includes a **5-minute, 9-slide presentation script** that already matches the agreed pitch. What it adds to this file:
 
----
+- **Title and question:** *"A Watch Before the Market Opens."* How might Garden Market staff use an early sign of high river flow to put less stock in harm's way and still serve a customer on time if the storm passes?
+- **16 July 2024, people first:** Evergreen sounded its **evacuation alarm at 11:30 a.m.** Water rushed onto the site **around noon**, and staff moved 113 campers off site. That half hour belongs to people, so the stock decision moves to **opening time** ([Evergreen](https://www.evergreen.ca/news/flooding-at-evergreen-brick-works-shows-a-need-for-more-climate-ready-spaces/)).
+- **River gauge:** the Todmorden gauge stage rose **2.60 m between 9 a.m. and noon** EDT on 16 July 2024. This is federal 02HC024 data, a different gauge from TRCA's 78.9 → 80.0 m reading in Section 6.
+- **The protocol adds:**
+  - At the morning briefing, staff name who calls **STOP**, who guides visitors and which route is checked.
+  - At STOP, everyone leaves the stock where it is.
+  - Portable signs and a removable tray keep everything off heritage walls and out of drainage paths.
+- **Shopper test:**
+  - **Setup:** 12 people browse both a Normal and a Watch (samples-only) counter, in alternating order. Each visit starts with 40 packets and the same pretend budget, and buying nothing is allowed.
+  - **Targets:** Watch leaves at most **25%** of Normal's packets exposed, handoff is at most **30 seconds** slower, and **zero** handling happens after STOP.
+- **Fair model test:**
+  - Staff decide twice at the same pre-opening time: first with official alerts only, then with the model added.
+  - Only use inputs that existed at that time.
+  - If timed archives are missing, keep a shadow log from now on.
+- **Pickup host candidate:** **Leaside Memorial Community Gardens**, 1073 Millwood Rd, about 2 km away and outside the TRCA floodplain. The William Lea Room costs $138/h on weekends ([rates](https://leasidegardens.com/william-lea-room/)). It's a phase-two candidate alongside Copp Hall and the two churches.
+- **Reserve case:** NANUK 925. The loaded tray is 360 × 240 × 92.7 mm, leaving about 15 mm of headroom.
+- **Comparison case:** Zion National Park closes the Narrows on a flash-flood warning and on river flow. The lesson is to write down who can change operations and what visitors hear.
+- **Seven figures** (photos and charts) are in `research/figures/`.
+
+**Where the school doc and this file differ (check before slides):**
+- **Flood year:** the school doc follows the 1UP brief, "lost thousands of dollars of inventory in **2023**". Evergreen's own pages date the flood to **16 July 2024** and give no dollar figure. On slides, say "the 2024 flood (the brief says 2023)", or ask the organizers.
+- **29% Watch replay:** the school doc still cites it. Use the corrected Section 6 framing: no forecast gave early warning, and Flood Desk works alongside TRCA.
 
 ## 12. Slides this research supports
 
