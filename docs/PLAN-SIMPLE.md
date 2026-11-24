@@ -1,5 +1,7 @@
 # Yellow Zone Solution: The Simple Version
 
+> **Updated 2026-11-24, agreed plan:** the judging ask is a **CAD $2,422.46 pilot**: a sample-only display on flood-watch mornings, guided by Flood Desk, with a log of every market morning. **$100,000 is the ceiling**, not a target. Off-site pickup and the full $100K schedule are **phase two**, only if the pilot works and a host agrees in writing. See [BUDGET.md](BUDGET.md).
+
 **Foldable shelves + a flood warning app + a practised drill = no Garden Market stock lost to the next flood.**
 
 ```mermaid

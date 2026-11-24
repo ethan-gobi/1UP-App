@@ -1,5 +1,7 @@
 # Timeline: the whole Yellow Zone project
 
+> **Updated 2026-11-24, agreed plan:** the judging ask is a **CAD $2,422.46 pilot**: a sample-only display on flood-watch mornings, guided by Flood Desk, with a log of every market morning. **$100,000 is the ceiling**, not a target. Off-site pickup and the full $100K schedule are **phase two**, only if the pilot works and a host agrees in writing. See [BUDGET.md](BUDGET.md).
+
 This runs from the first research in October 2026 to the end of year two in 2028. **Dates after today (18 Nov 2026) are planned, not booked.**
 - The **judges' pitch is assumed for mid-December 2026.**
 - The **pilot is assumed to start in January 2027.** If either date moves, shift everything after it by the same amount.

@@ -6,7 +6,7 @@
 
 - The Evergreen Brick Works has flooded **three times in about a dozen years** (2013, July 16, 2024, Sept 2, 2026). Its flood design protects the buildings, **not the stock on the ground floor**.
 - The team's chosen solution is the **Fold-Out Garden Market**. A small reserve of stock lives in a cabinet at a dry host outside the floodplain, and during a closure the cabinet folds open into a counter so customers can still pick up reserved orders.
-- **Budget: CAD $100,000, website capped at $100.** Year one costs **$81,104.23** (hall at the higher $200/h rate, 10% contingency), the website $100, and **$18,795.77** is held as a year-two reserve. See [BUDGET.md](BUDGET.md). (The earlier $61,330.51 plan is superseded.)
+- **Budget: CAD $2,422.46 pilot ask (agreed 2026-11-24), $100,000 ceiling.** The pilot tests a sample-only display and Flood Desk on watch mornings. The earlier full-spend plan ($81,104.23 year one, $100 website, $18,795.77 reserve) is kept as phase two. See [BUDGET.md](BUDGET.md).
 - **Biggest unknown:** the proposed host, Copp Hall, has not agreed to anything, and its current prices are not published.
 
 ## 2. The site and its floods

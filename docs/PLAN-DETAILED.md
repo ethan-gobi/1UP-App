@@ -1,5 +1,7 @@
 # Yellow Zone Solution Plan: Foldable Shelves + Flood Warning App (Detailed)
 
+> **Updated 2026-11-24, agreed plan:** the judging ask is a **CAD $2,422.46 pilot**: a sample-only display on flood-watch mornings, guided by Flood Desk, with a log of every market morning. **$100,000 is the ceiling**, not a target. Off-site pickup and the full $100K schedule are **phase two**, only if the pilot works and a host agrees in writing. See [BUDGET.md](BUDGET.md).
+
 Our solution protects Garden Market stock from floods with foldable, latched shelves that keep reserve stock high every day. A warning app makes sure staff and vendors finish folding and loading before the water comes. A drill-tested pilot proves it works, for $100,000 over 12 months.
 
 Short version: [PLAN-SIMPLE.md](PLAN-SIMPLE.md)
