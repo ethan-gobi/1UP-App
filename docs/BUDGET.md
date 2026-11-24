@@ -1,6 +1,23 @@
-# Budget: CAD $100,000, with $100 for the website
+# Budget
 
-Gopi set two rules on 2026-11-18: the whole **$100,000** is ours to spend, and the **website/app gets $100**. This replaces the $61,330.51 schedule in PR #2, which left $38,669.49 unspent and gave the app $6,140.32.
+## Judging ask: CAD $2,422.46 pilot (agreed 2026-11-24)
+
+Gopi, Hogan, Claude and Codex agreed on one plan ([issue #13](https://github.com/ethan-gobi/1UP-App/issues/13)):
+
+1. **Ask the judges for CAD $2,422.46** for a 2027 pilot. On flood-watch mornings, staff check Flood Desk, official alerts (TRCA, ECCC) and the site. Then they open with a **sample-only display** (one sample per variety, the rest of the stock kept dry).
+2. **Log every market morning**, quiet ones too. Each entry records the Flood Desk level and %, the rain forecast, official alerts with issue times, gauge 02HC024, the staff decision and the outcome. That lets us count misses as well as hits.
+3. **$100,000 is the ceiling, not a spend target.**
+4. **Phase two (off-site pickup) only if the pilot supports it and a host agrees in writing.** Its costs are the schedule below.
+
+The line-by-line breakdown of the $2,422.46 is in Hogan's deck. It will be copied here.
+
+---
+
+# Phase two (not requested now): off-site pickup schedule, CAD $100,000 ceiling
+
+This was the full-spend plan of 2026-11-18. It is kept as the costed phase two and is **not** part of the judging ask.
+
+On 2026-11-18 Gopi set two rules: the whole **$100,000** could be spent, and the **website/app gets $100**. This replaces the $61,330.51 schedule in PR #2, which left $38,669.49 unspent and gave the app $6,140.32.
 
 ## At a glance
 
