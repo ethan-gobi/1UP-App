@@ -26,37 +26,55 @@ The river passed 79.0 m **18 times** in that period (separate events at least 24
 - A false alarm is an alert that is not followed by a crossing within 6 hours.
 - Every input is delayed 15 minutes to mimic publishing.
 
-## Results on the held-out years (2019 to 2021)
+## Results on the held-out years (2019 to 2026, 25 crossings)
+
+2019 to March 2021 come from TRCA open data; March 2021 to November 2026 from TRCA's gauging site export (`fetch_trca_live.py`, 5-minute values averaged to 15 minutes). Settings were not changed after 2018.
 
 | | Crossings warned at least 15 min ahead | Median warning | False alarms a year |
 |---|---|---|---|
-| Prepare (rain) | 5 of 7 | 105 min | 1.0 |
-| Move now (river) | 6 of 7 | 30 min | 1.0 |
-| Either alert | **7 of 7, every one at least 45 min ahead** | 105 min | up to 2 |
-| Simple baseline: Todmorden passes 78.5 m | 6 of 7 | 45 min | 3.3 |
+| Prepare (rain) | 18 of 25 | 105 min | 3.2 |
+| Move now (river) | 18 of 25 | 30 min | 1.6 |
+| Either alert | **24 of 25** | 105 min | up to about 5 |
+| Simple baseline: Todmorden passes 78.5 m | 23 of 25 | 45 min | 5.8 |
 
-Per crossing (minutes of warning before the river passed 79.0 m; "–" = no alert):
+The one miss is 17 February 2022, a winter snowmelt rise with little rain. Per crossing, in Toronto time (minutes of warning; "–" = no alert):
 
-| Crossing (EST) | Prepare | Move now | Baseline |
+| Crossing | Prepare | Move now | Baseline |
 |---|---|---|---|
-| 2019-04-14 22:15 | 105 | 15 | 45 |
-| 2019-06-20 20:30 | – | 105 | 15 |
-| 2019-10-27 04:00 | 60 | 0 | 30 |
-| 2020-01-11 14:00 (rain on snow) | – | 45 | 90 |
-| 2020-07-22 23:45 | 120 | 90 | 0 |
-| 2020-08-02 11:00 | 105 | 15 | 45 |
-| 2020-08-03 18:15 | 120 | 30 | 45 |
+| 2019-04-14 23:15 | 105 | 15 | 45 |
+| 2019-06-20 21:30 | – | 105 | 15 |
+| 2019-10-27 05:00 | 60 | 0 | 30 |
+| 2020-01-11 14:00 | – | 45 | 90 |
+| 2020-07-23 00:45 | 120 | 90 | 0 |
+| 2020-08-02 12:00 | 105 | 15 | 45 |
+| 2020-08-03 19:15 | 120 | 30 | 45 |
+| 2021-03-26 09:15 | 90 | 60 | 90 |
+| 2021-09-08 03:45 | 255 | 0 | 210 |
+| 2021-09-15 02:15 | 120 | 105 | 30 |
+| 2021-09-22 23:30 | 105 | 15 | 45 |
+| 2022-02-17 06:00 | – | – | 15 |
+| 2022-07-25 00:00 | 120 | 90 | 15 |
+| 2023-04-01 04:45 | – | 15 | 30 |
+| 2023-06-12 10:15 | 45 | 30 | 60 |
+| 2023-08-25 02:30 | – | 30 | 45 |
+| 2024-04-03 13:00 | 45 | 15 | 30 |
+| 2024-07-15 18:00 (and 16 July, same 24 h event) | – | 60 | 30 |
+| 2024-08-17 16:00 | 105 | 90 | 15 |
+| 2025-04-03 03:15 | 60 | 0 | 315 |
+| 2025-12-28 22:45 | 90 | 15 | 45 |
+| 2026-05-23 20:00 | 0 | 30 | 105 |
+| 2026-06-18 05:30 | 105 | 0 | 30 |
+| 2026-08-31 08:45 | 120 | 0 | 15 |
+| 2026-09-02 18:00 | 675 | 0 | 0 |
 
 What this means in plain words:
-- The river gives **minutes, not hours**. Move now gives a median of 30 minutes. Prepare, from rain, buys about an hour and a half more, but missed 2 of 7 (a winter rain-on-snow event and one storm that fell mostly outside the gauges).
-- Move now beats the simple 78.5 m rule on false alarms (1 vs 3.3 a year) but not on warning time. We say so.
-- 7 test crossings is a small sample. Treat these as "it works on real storms", not as a precise accuracy figure.
+- The river gives **minutes, not hours**. Move now alone gives a median of 30 minutes; Prepare, from rain, adds about an hour more.
+- Together they warned 24 of 25 crossings at least 15 minutes ahead, with fewer false alarms than the simple 78.5 m rule, which gives similar coverage at 5.8 false alarms a year.
+- Prepare's false alarms rose from 1 a year (2019 to 2021) to 3.2 a year over 2019 to 2026. Heavy rain that doesn't flood the Don is common. That is why Prepare means "get ready", not "close".
+- 16 July 2024 counts in the same event as a smaller crossing the evening before (events closer than 24 h are merged). In the replay, TRCA's 09:35 Flood Watch starts the checklist; Flood Desk's rain rule confirms at 10:45; the river passes 79.0 m at 11:15.
 
 ## What Flood Desk does and does not claim
 
 - It does **not** forecast floods earlier than TRCA. TRCA issues watershed messages; on 16 July 2024 it issued a Flood Watch at 9:35 and a Flood Warning at 11:35 and phoned the Brick Works.
 - It turns TRCA's message and the live gauges into a site plan: who moves what, by when.
 
-## Not yet included
-
-TRCA's open-data files stop in March 2021. Storms from 2022 to 2026, including 16 July 2024, need TRCA's live gauge feed.
