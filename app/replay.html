@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flood Desk Storm Replay</title>
+<meta name="description" content="Minute-by-minute replay of a real Don River storm using only TRCA gauge data available at each moment.">
+<link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@500,700,900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Nunito";src:url(fonts/nunito-latin.woff2) format("woff2");font-weight:200 1000;font-display:swap}
+:root{
+  --bg:#0b1a24; --panel:#10242f; --panel2:#153140; --ink:#eef5f7; --muted:#9fb6bf; --faint:#6d8791; --line:#23414f;
+  --water:#3fb6e8; --water2:#1d6f99; --rain:#7fa8ff; --up:#9be38f;
+  --normal:#5cc287; --prepare:#f2b544; --move:#ff7a45; --flood:#ff5b57; --trca:#c9a6ff;
+  --ease:cubic-bezier(.22,.8,.24,1);
+}
+:root[data-theme=light]{--bg:#eef5f7;--panel:#fff;--panel2:#f3f8fa;--ink:#0d1e26;--muted:#4f6670;--faint:#7d929a;--line:#d6e3e8;--water:#1580b8;--water2:#9fd3ec;--rain:#4b6fd6;--up:#3d9a3a;--normal:#2e8c55;--prepare:#b87708;--move:#d4521a;--flood:#c22b26;--trca:#7a4fd0}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:500 16px/1.4 "Satoshi","Nunito",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1600px;margin:0 auto;padding:16px 24px;display:grid;gap:14px;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);grid-template-rows:auto 1fr auto;min-height:100vh}
+header{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:40px;height:40px}
+.brand b{font-size:20px;font-weight:900;letter-spacing:-.01em;display:block}
+.brand span{color:var(--muted);font-size:14px}
+.clock{margin-left:auto;text-align:right}
+.clock .time{font-family:"Clash Display","Satoshi",sans-serif;font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.clock .date{color:var(--muted);font-size:14px}
+.tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;color:var(--muted)}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--flood);animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 18px;min-width:0}
+.chart{display:flex;flex-direction:column;gap:8px}
+.chart h2,.side h2{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+.reading{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline}
+.reading div{display:flex;flex-direction:column}
+.reading strong{font-family:"Clash Display","Satoshi",sans-serif;font-size:30px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.05}
+.reading small{color:var(--muted);font-size:13px}
+.reading .gap strong{color:var(--prepare)}
+svg.plot{width:100%;height:auto;display:block;overflow:visible}
+svg.scene{width:100%;height:auto;display:block;border-radius:14px}
+.sl{font:800 13px "Satoshi",system-ui,sans-serif;letter-spacing:.02em}
+#rain line{stroke:#40607a;stroke-width:1.4;stroke-linecap:round;opacity:.7}
+#rain{animation:fall .45s linear infinite}
+@keyframes fall{from{transform:translate(0,-40px)}to{transform:translate(-8px,0)}}
+#wave{animation:drift 3s linear infinite}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+#wtag{transition:transform .9s cubic-bezier(.22,.8,.24,1)}
+@media (prefers-reduced-motion:reduce){#rain,#wave{animation:none}}
+.plot text{fill:var(--faint);font-size:12px;font-family:inherit}
+.plot .grid{stroke:var(--line);stroke-width:1}
+.plot .lvl{fill:none;stroke:var(--water);stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+.plot .area{fill:url(#wfill)}
+.plot .upl{fill:none;stroke:var(--up);stroke-width:2;stroke-dasharray:5 5;opacity:.85}
+.plot .line79{stroke:var(--flood);stroke-width:2;stroke-dasharray:8 6}
+.plot .bar{fill:var(--rain)}
+.plot .now{stroke:var(--ink);stroke-width:1.5;opacity:.6}
+.plot .future{fill:var(--bg);opacity:.55}
+.plot .mark{stroke-width:2}
+.plot .dot{fill:var(--water);stroke:var(--bg);stroke-width:3}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.status{border-radius:18px;padding:18px 20px;border:2px solid var(--line);background:var(--panel);transition:background .5s var(--ease),border-color .5s var(--ease)}
+.status .lvl{font-family:"Clash Display","Satoshi",sans-serif;font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.status p{margin:6px 0 0;color:var(--muted)}
+.status[data-l=prepare]{border-color:var(--prepare);background:color-mix(in srgb,var(--prepare) 14%,var(--panel))}
+.status[data-l=prepare] .lvl{color:var(--prepare)}
+.status[data-l=move]{border-color:var(--move);background:color-mix(in srgb,var(--move) 16%,var(--panel))}
+.status[data-l=move] .lvl{color:var(--move)}
+.status[data-l=flood]{border-color:var(--flood);background:color-mix(in srgb,var(--flood) 18%,var(--panel))}
+.status[data-l=flood] .lvl{color:var(--flood)}
+.status[data-l=normal] .lvl{color:var(--normal)}
+.status[data-l=falling]{border-color:var(--water)} .status[data-l=falling] .lvl{color:var(--water)}
+.pulse{animation:pulse .9s var(--ease)}
+@keyframes pulse{0%{transform:scale(1)}35%{transform:scale(1.03)}100%{transform:scale(1)}}
+.feed{display:flex;flex-direction:column;gap:6px;min-height:40px;margin-top:8px;font-size:14px}
+.msg{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:10px 12px;background:var(--panel2);border-left:4px solid var(--trca);animation:drop .5s var(--ease)}
+.msg.fd{border-left-color:var(--prepare)} .msg.fd.mv{border-left-color:var(--move)} .msg.rv{border-left-color:var(--flood)}
+.msg b{font-variant-numeric:tabular-nums;min-width:52px;display:inline-block}
+.msg span{color:var(--muted)}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.tasks{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.task{display:grid;grid-template-columns:22px 62px 1fr;gap:8px;align-items:start;padding:5px 8px;font-size:14px;line-height:1.3;border-radius:10px;color:var(--faint);transition:all .4s var(--ease)}
+.task .who{font-weight:800;font-size:13px}
+.task .box{width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:1px;display:grid;place-items:center}
+.task.on{background:var(--panel2);color:var(--ink)}
+.task.on .box{border-color:var(--prepare)}
+.task.on.mv .box{border-color:var(--move)}
+.task.done .box{background:var(--normal);border-color:var(--normal)}
+.task.done .box::after{content:"";width:9px;height:5px;border:2.5px solid var(--bg);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.task .due{font-size:11px;color:var(--muted);display:block}
+footer{grid-column:1/-1;display:flex;gap:16px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:13px}
+footer .ctrl{margin-left:auto;display:flex;gap:8px}
+button{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer}
+button:hover{background:var(--panel2)}
+.summary{position:fixed;inset:0;display:none;place-items:center;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(6px);z-index:5}
+.summary.show{display:grid;animation:drop .6s var(--ease)}
+.summary .card{max-width:980px;padding:36px 40px;border-radius:24px;background:var(--panel);border:1px solid var(--line)}
+.summary h1{font-family:"Clash Display","Satoshi",sans-serif;margin:0 0 6px;font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.summary .sub{color:var(--muted);margin:0 0 22px;font-size:18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.stats div{background:var(--panel2);border-radius:16px;padding:16px}
+.stats strong{display:block;font-size:40px;font-weight:1000;line-height:1;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:14px}
+.summary .fine{color:var(--faint);font-size:13px;margin:0}
+@media (max-width:900px){.wrap{grid-template-columns:1fr;padding:16px}.clock .time{font-size:32px}.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1f6b66"/><path d="M6 19c3 0 3-2 5-2s2 2 5 2 3-2 5-2 2 2 5 2" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 6l5 8h-10z" fill="#fff"/></svg>
+      <div><b>Flood Desk · Storm replay</b><span id="evTitle">Loading…</span></div>
+    </div>
+    <span class="tag"><i></i>Real TRCA gauge data, shown only as it was available at each moment</span>
+    <div class="clock"><div class="time" id="clock">--:--</div><div class="date" id="date"></div></div>
+  </header>
+
+  <section class="panel chart" aria-label="River and rain">
+    <h2>Don River at Todmorden, beside the Brick Works (TRCA gauge HY019)</h2>
+    <div class="reading">
+      <div><strong id="lvlNow">–</strong><small>river level, m above sea level</small></div>
+      <div class="gap"><strong id="toLine">–</strong><small id="toLineLbl">below TRCA's 79.0 m flood line</small></div>
+      <div><strong id="rain1">–</strong><small>rain in the last hour, Don watershed gauges</small></div>
+    </div>
+<svg class="scene" id="scene" viewBox="0 0 900 280" role="img" aria-label="Cross-section of the Don valley at the Brick Works with the water level">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f97a6"/><stop offset="1" stop-color="#c3d2da"/></linearGradient>
+        <linearGradient id="h2o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f9bc7"/><stop offset=".3" stop-color="#2f6f96"/><stop offset="1" stop-color="#173a52"/></linearGradient>
+        <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c6b3c"/><stop offset=".08" stop-color="#5b4a37"/><stop offset="1" stop-color="#2b2219"/></linearGradient>
+        <pattern id="brick" width="16" height="8" patternUnits="userSpaceOnUse"><rect width="16" height="8" fill="#9b4a33"/><path d="M0 .5H16M0 4.5H16M8 .5V4.5M0 4.5V8M16 4.5V8" stroke="#6e3022" stroke-width="1"/></pattern>
+        <clipPath id="sceneClip"><rect width="900" height="280" rx="14"/></clipPath>
+      </defs>
+      <g clip-path="url(#sceneClip)">
+        <rect width="900" height="280" fill="url(#sky)"/>
+        <g id="clouds" opacity=".85"><ellipse cx="160" cy="34" rx="120" ry="22" fill="#5f6f78"/><ellipse cx="520" cy="24" rx="170" ry="26" fill="#56656e"/><ellipse cx="800" cy="40" rx="110" ry="20" fill="#5f6f78"/></g>
+        <g id="rain" opacity="0"></g>
+        <g id="water"><rect id="wbody" x="0" width="900" height="300" fill="url(#h2o)" opacity=".92"/><g id="waveG"><path id="wave" fill="#a9dcf5" opacity=".75"/></g></g>
+        <path id="ground" fill="url(#soil)"/>
+        <g id="site"></g>
+        <line id="fl" x1="0" x2="900" stroke="#ff5b57" stroke-width="2" stroke-dasharray="8 6"/>
+        <text id="flT" x="890" text-anchor="end" class="sl" fill="#ff8c88">TRCA flood line 79.0 m</text>
+        <g id="wtag"><rect x="0" y="-15" width="96" height="26" rx="13" fill="#0b1a24" opacity=".85"/><text id="wtagT" x="48" y="3" text-anchor="middle" class="sl" fill="#bfe6ff">–</text></g>
+      </g>
+    </svg>
+    <svg class="plot" id="plot" viewBox="0 0 900 250" role="img" aria-label="River level and rain chart"></svg>
+  </section>
+
+  <aside class="side">
+    <div class="status" id="status" data-l="normal">
+      <div class="lvl" id="statusLvl">Normal</div>
+      <p id="statusTxt">Routine day. Nothing to do.</p>
+    </div>
+    <div class="panel">
+      <h2>Messages</h2>
+      <div class="feed" id="feed" aria-live="polite"></div>
+    </div>
+    <div class="panel">
+      <h2>Brick Works checklist</h2>
+      <div class="tasks" id="tasks"></div>
+    </div>
+  </aside>
+
+  <footer>
+    <span id="fine">Alerts are computed by Flood Desk's rule on TRCA rain and river gauges, with a 15-minute publishing delay. The rule's settings were fixed using 2015 to 2018 storms.</span>
+    <div class="ctrl"><button id="play">Pause</button><button id="restart">Restart</button></div>
+  </footer>
+</div>
+
+<div class="summary" id="summary"><div class="card">
+  <h1 id="sumH">TRCA warns the watershed. Flood Desk tells the site who moves what.</h1>
+  <p class="sub" id="sumSub"></p>
+  <div class="stats" id="stats"></div>
+  <p class="fine" id="sumFine"></p>
+</div></div>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+if (q.get("theme") === "light") document.documentElement.dataset.theme = "light";
+const EVENTS = {
+  "2024-07-16": {
+    title: "16 July 2024 storm · held out, never used to tune the rule",
+    msgs: [
+      { t: "start", who: "TRCA", text: "Watershed Conditions Statement (issued 15 July): heavy rain possible." },
+      { t: "09:35", who: "TRCA", text: "Flood Watch issued for the Don River.", prepare: true },
+      { t: "11:35", who: "TRCA", text: "Flood Warning issued. TRCA phones the Brick Works." },
+    ],
+    note: "Weather forecasts the day before called for 4 to 7 mm. About 51 mm fell. Nobody, including Flood Desk, could have known at breakfast.",
+  },
+  "2020-08-02": {
+    title: "2 August 2020 storm · held out, never used to tune the rule",
+    msgs: [],
+    note: "This storm was in the test years (2019 to 2021): the rule had never seen it.",
+  },
+  "2017-07-20": { title: "20 July 2017 storm · used to tune the rule", msgs: [], note: "This storm was in the tuning years (2015 to 2018)." },
+};
+const TASKS = [
+  { tier: "prepare", who: "Maya", text: "Send one Prepare alert to staff, vendors and tonight's event", lag: 0 },
+  { tier: "prepare", who: "Maya", text: "Call the on-call pair in; stand by at the lower lot", lag: 15 },
+  { tier: "prepare", who: "Aisha", text: "Pack slow stock into the cabinet bins", lag: 30 },
+  { tier: "prepare", who: "Marcus", text: "Warn tonight's event client that Plan B is likely", lag: 30 },
+  { tier: "move", who: "Maya", text: "MOVE NOW: clear the valley floor, close Lower Don trail access", lag: 0 },
+  { tier: "move", who: "Aisha", text: "Roll the market cabinet to the upper level", lag: 15 },
+  { tier: "move", who: "Maya", text: "Close the lower parking lot; log who left and when", lag: 15 },
+];
+let name = q.get("event") || "2024-07-16";
+let res = await fetch(`replays/${name}.json`);
+if (!res.ok) { name = "2020-08-02"; res = await fetch(`replays/${name}.json`); }
+const EV = EVENTS[name] || { title: name, msgs: [], note: "" };
+const speed = +(q.get("speed") || 4); // 15-minute steps per second
+const data = await res.json();
+const R = data.rows, LINE = data.line;
+$("evTitle").textContent = EV.title;
+const fmtT = (s) => s.slice(11, 16);
+const fmtD = (s) => new Date(s + ":00").toLocaleDateString("en-CA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const firstIdx = (k) => R.findIndex((r) => r[k]);
+const crossIdx = R.findIndex((r) => r.tod != null && r.tod >= LINE);
+
+// ---------- chart ----------
+const W = 900, H = 250, L = 56, Rr = 20, T = 10, RB = 150, RT = 165, RH = 62;
+const lv = R.map((r) => r.tod).filter((v) => v != null);
+const lo = Math.floor((Math.min(...lv) - 0.15) * 2) / 2, hi = Math.max(80.2, Math.ceil((Math.max(...lv) + 0.1) * 2) / 2);
+const x = (i) => L + (i / (R.length - 1)) * (W - L - Rr);
+const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (RB - T);
+const maxRain = Math.max(4, ...R.map((r) => r.rain || 0));
+const rb = (v) => (v / maxRain) * RH;
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, a, parent) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); (parent || plot).appendChild(e); return e; };
+const plot = $("plot");
+plot.innerHTML = `<defs><linearGradient id="wfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--water)" stop-opacity=".35"/><stop offset="1" stop-color="var(--water)" stop-opacity="0"/></linearGradient></defs>`;
+for (let v = lo; v <= hi + 1e-9; v += 0.5) { el("line", { class: "grid", x1: L, x2: W - Rr, y1: y(v), y2: y(v) }); el("text", { x: L - 8, y: y(v) + 4, "text-anchor": "end" }).textContent = v.toFixed(1); }
+R.forEach((r, i) => { if (r.t.endsWith(":00") && +r.t.slice(11, 13) % 2 === 0) el("text", { x: x(i), y: H - 4, "text-anchor": "middle" }).textContent = fmtT(r.t); });
+el("line", { class: "line79", x1: L, x2: W - Rr, y1: y(LINE), y2: y(LINE) });
+el("text", { x: W - Rr, y: y(LINE) - 8, "text-anchor": "end", style: "fill:var(--flood);font-weight:800" }).textContent = "TRCA flood line 79.0 m";
+el("line", { class: "grid", x1: L, x2: W - Rr, y1: RT + RH, y2: RT + RH });
+el("text", { x: L - 8, y: RT + 12, "text-anchor": "end" }).textContent = "rain";
+const area = el("path", { class: "area" }), line = el("path", { class: "lvl" });
+const bars = el("g", {}), marks = el("g", {});
+const nowL = el("line", { class: "now", y1: T, y2: RT + RH }), dot = el("circle", { class: "dot", r: 7 });
+const fut = el("rect", { class: "future", y: 0, height: H - 18 });
+
+
+// ---------- valley cross-section (water from the real gauge) ----------
+const yS = (m) => 262 - (m - 76.8) * 48;
+const G = [[0,20],[60,40],[110,yS(79.1)],[360,yS(79.05)],[520,yS(79.05)],[575,yS(78.4)],[600,yS(77.05)],[690,yS(77.0)],[712,yS(78.6)],[760,yS(79.2)],[820,70],[900,40]];
+$("ground").setAttribute("d", "M" + G.map((p) => p.join(",")).join("L") + "L900,280L0,280Z");
+const site = $("site"); const sv = (t, a) => el(t, a, site);
+const floor = yS(79.07);
+sv("rect", { x: 140, y: floor - 70, width: 150, height: 70, fill: "url(#brick)" });
+sv("path", { d: `M134 ${floor - 70}L215 ${floor - 100}L296 ${floor - 70}Z`, fill: "#5b2a20" });
+sv("rect", { x: 250, y: floor - 140, width: 18, height: 70, fill: "url(#brick)" });
+sv("rect", { x: 160, y: floor - 46, width: 26, height: 46, fill: "#2a1712" });
+sv("rect", { x: 200, y: floor - 46, width: 26, height: 46, fill: "#2a1712" });
+sv("text", { x: 215, y: floor - 108, "text-anchor": "middle", class: "sl", fill: "#f3d9c9" }).textContent = "Brick Works kilns";
+sv("path", { d: `M385 ${floor - 30}L425 ${floor - 52}L465 ${floor - 30}Z`, fill: "#f2b544" });
+sv("rect", { x: 392, y: floor - 30, width: 66, height: 30, fill: "#e9e2cf" });
+sv("text", { x: 425, y: floor - 60, "text-anchor": "middle", class: "sl", fill: "#ffe2a6" }).textContent = "Garden Market";
+for (const [x, h] of [[90, 46], [330, 38], [790, 52], [850, 60]]) { const gy = x > 700 ? yS(79.6) - (x - 760) * 0.9 : floor; sv("rect", { x: x - 2, y: gy - h * 0.5, width: 4, height: h * 0.5, fill: "#3a2a1c" }); sv("circle", { cx: x, cy: gy - h * 0.6, r: h * 0.32, fill: "#3f6b45" }); }
+sv("text", { x: 645, y: yS(77.0) + 22, "text-anchor": "middle", class: "sl", fill: "#cfe8d6" }).textContent = "Don River";
+$("fl").setAttribute("y1", yS(79)); $("fl").setAttribute("y2", yS(79)); $("flT").setAttribute("y", yS(79) - 8);
+let wavePath = "M-60,0"; for (let x = -60; x <= 1000; x += 30) wavePath += `Q${x + 15},${x % 60 ? 5 : -5} ${x + 30},0`; wavePath += "L1000,8L-60,8Z";
+$("wave").setAttribute("d", wavePath);
+const rainG = $("rain"); for (let k = 0; k < 140; k++) { const x = (k * 97) % 940, y = (k * 53) % 300 - 20; el("line", { x1: x, y1: y, x2: x - 6, y2: y + 16 }, rainG); }
+function drawScene(lvl, r1h) {
+  if (lvl == null) return;
+  const wy = yS(lvl);
+  $("wbody").setAttribute("y", wy); $("waveG").setAttribute("transform", `translate(0,${wy - 3})`);
+  $("wtag").setAttribute("transform", `translate(${lvl >= 79 ? 470 : 597},${wy - 18})`);
+  $("wtagT").textContent = `${lvl.toFixed(2)} m`;
+  rainG.style.opacity = Math.min(1, (r1h || 0) / 14);
+}
+// ---------- state ----------
+let i = 0, playing = true, timer;
+const feed = $("feed");
+function addMsg(time, who, text, cls = "") {
+  const m = document.createElement("div"); m.className = "msg " + cls;
+  m.innerHTML = `<b>${time}</b><div><strong>${who}</strong> <span>${text}</span></div>`;
+  feed.prepend(m);
+  while (feed.children.length > 4) feed.lastChild.remove();
+}
+const tasksEl = $("tasks");
+TASKS.forEach((t) => { const d = document.createElement("div"); d.className = "task " + (t.tier === "move" ? "mv" : ""); d.innerHTML = `<i class="box"></i><span class="who">${t.who}</span><span>${t.text}<span class="due"></span></span>`; tasksEl.appendChild(d); t.el = d; });
+// Prepare starts at whichever comes first: TRCA's Flood Watch (Flood Desk reads TRCA's public messages) or the rain rule.
+const rainI = firstIdx("prepare"), mI = firstIdx("move");
+const trig = EV.msgs.find((m) => m.prepare);
+const watchI = trig ? R.findIndex((r) => fmtT(r.t) >= trig.t) : -1;
+const pI = [rainI, watchI].filter((v) => v >= 0).reduce((a, b) => Math.min(a, b), Infinity) === Infinity ? -1 : Math.min(...[rainI, watchI].filter((v) => v >= 0));
+const fromWatch = watchI >= 0 && pI === watchI;
+const addMin = (s, m) => { const d = new Date(s + ":00"); d.setMinutes(d.getMinutes() + m); return d.toTimeString().slice(0, 5); };
+
+function render() {
+  const r = R[i];
+  $("clock").textContent = fmtT(r.t); $("date").textContent = fmtD(r.t);
+  let d = "", a = "", first = null, last = null;
+  for (let k = 0; k <= i; k++) { if (R[k].tod == null) continue; const p = `${x(k).toFixed(1)},${y(R[k].tod).toFixed(1)}`; d += (d ? "L" : "M") + p; if (first == null) first = k; last = k; }
+  line.setAttribute("d", d);
+  area.setAttribute("d", d ? `${d}L${x(last)},${RB}L${x(first)},${RB}Z` : "");
+  bars.innerHTML = "";
+  for (let k = 0; k <= i; k++) { const v = R[k].rain || 0; if (v > 0) el("rect", { class: "bar", x: x(k) - 3, width: 6, y: RT + RH - rb(v), height: rb(v), rx: 2 }, bars); }
+  nowL.setAttribute("x1", x(i)); nowL.setAttribute("x2", x(i));
+  fut.setAttribute("x", x(i) + 1); fut.setAttribute("width", Math.max(0, W - x(i)));
+  if (R[last]) { dot.setAttribute("cx", x(last)); dot.setAttribute("cy", y(R[last].tod)); }
+  const lvl = R[last]?.tod;
+  $("lvlNow").textContent = lvl != null ? lvl.toFixed(2) : "–";
+  const over = lvl != null && lvl >= LINE;
+  $("toLine").textContent = lvl != null ? `${Math.round(Math.abs(LINE - lvl) * 100)} cm` : "–";
+  $("toLine").style.color = over ? "var(--flood)" : "";
+  $("toLineLbl").textContent = over ? "OVER TRCA's 79.0 m flood line" : "below TRCA's 79.0 m flood line";
+  $("rain1").textContent = r.r1h != null ? `${r.r1h.toFixed(1)} mm` : "–";
+  drawScene(lvl, r.r1h);
+
+  // TRCA messages at their real times
+  for (const m of EV.msgs) if (!m.shown && (m.t === "start" ? i === 0 : fmtT(r.t) >= m.t)) { m.shown = true; addMsg(m.t === "start" ? "15 Jul" : m.t, m.who, m.text); }
+  const st = $("status");
+  let level = "normal";
+  if (pI >= 0 && i >= pI) level = "prepare";
+  if (mI >= 0 && i >= mI) level = "move";
+  if (crossIdx >= 0 && i >= crossIdx) level = lvl != null && lvl < LINE - 0.1 && i > crossIdx + 4 ? "falling" : "flood";
+  if (st.dataset.l !== level) {
+    st.dataset.l = level; st.classList.remove("pulse"); void st.offsetWidth; st.classList.add("pulse");
+    const txt = {
+      normal: ["Normal", "Routine day. Nothing to do."],
+      prepare: ["Prepare", fromWatch ? "TRCA issued a Flood Watch for the Don. Flood Desk turned it into the site checklist." : `Heavy rain on the Don watershed gauges: ${r.r1h?.toFixed(0)} mm in the last hour. Get ready to move.`],
+      move: ["Move now", "The river is climbing fast toward the flood line. Clear the valley floor."],
+      flood: ["River over the line", "The Don is over 79.0 m. Valley closed, everyone is up the hill."],
+      falling: ["River falling", "Back under the line. Stay closed until TRCA lifts its message and staff inspect the floor."],
+    }[level];
+    $("statusLvl").textContent = txt[0]; $("statusTxt").textContent = txt[1];
+    if (level === "prepare") { addMsg(fmtT(r.t), "Flood Desk", fromWatch ? "TRCA Watch → PREPARE sent to Maya, Aisha and Marcus." : "PREPARE sent to Maya, Aisha and Marcus.", "fd"); mark(i, "var(--prepare)", "Prepare"); }
+    if ((level === "move" || level === "flood") && mI >= 0 && i >= mI && !said.move) { said.move = true; addMsg(fmtT(r.t), "Flood Desk", "MOVE NOW sent. Clear the valley floor.", "fd mv"); mark(i, "var(--move)", "Move now"); }
+    if (level === "flood" && !said.flood) { said.flood = true; addMsg(fmtT(r.t), "River", "Don at Todmorden passes 79.0 m.", "rv"); mark(i, "var(--flood)", "Over 79.0 m"); }
+  }
+  if (fromWatch && i === rainI) addMsg(fmtT(r.t), "Flood Desk", `Rain gauges confirm: ${r.r1h?.toFixed(0)} mm in the last hour across the Don watershed.`, "fd");
+  // tasks light up when their tier fires, and tick off on schedule
+  for (const t of TASKS) {
+    const at = t.tier === "prepare" ? pI : mI;
+    if (at < 0 || i < at) continue;
+    t.el.classList.add("on");
+    t.el.querySelector(".due").textContent = `due ${addMin(R[at].t, t.lag + 15)}`;
+    if (i >= at + Math.max(1, t.lag / 15 + 1)) t.el.classList.add("done");
+  }
+}
+let markRow = 0; const said = {};
+function mark(k, color, label) {
+  el("line", { class: "mark", x1: x(k), x2: x(k), y1: T, y2: RB, stroke: color }, marks);
+  el("text", { x: x(k) + 6, y: T + 14 + 18 * markRow++, style: `fill:${color};font-weight:800;font-size:13px` }, marks).textContent = `${label} ${fmtT(R[k].t)}`;
+}
+window.__summary = () => showSummary();
+function showSummary() {
+  const mins = (a, b) => (a >= 0 && b >= 0 ? (b - a) * 15 : null);
+  const lp = mins(pI, crossIdx), lm = mins(mI, crossIdx);
+  const watch = EV.msgs.find((m) => m.t === "09:35");
+  $("sumSub").textContent = EV.note;
+  if (!EV.msgs.length) $("sumH").textContent = "The river gives minutes. Flood Desk turns them into a plan.";
+  $("stats").innerHTML = [
+    [lp != null ? `${lp} min` : "–", fromWatch ? "from TRCA's Flood Watch, turned into the site checklist, to the river crossing 79.0 m" : "from Flood Desk's Prepare alert to the river crossing 79.0 m"],
+    lm != null && lm > 0 ? [`${lm} min`, "from Move now to the river crossing 79.0 m"] : [rainI >= 0 ? fmtT(R[rainI].t) : "–", "Flood Desk's own rain gauges confirm Prepare, even without TRCA"],
+    [crossIdx >= 0 ? fmtT(R[crossIdx].t) : "–", "river passes the flood line" + (watch ? ". TRCA Flood Warning followed at 11:35" : "")],
+  ].map(([a, b]) => `<div><strong>${a}</strong><span>${b}</span></div>`).join("");
+  $("sumFine").textContent = "Backtest 2019 to 2026, 25 river crossings: warned 24 at least 15 min ahead. Every storm, miss and false alarm is in model/nowcast/README.md.";
+  $("summary").classList.add("show");
+  window.__replayDone = true;
+}
+function step() {
+  render();
+  if (i >= R.length - 1) { playing = false; $("play").textContent = "Play"; setTimeout(showSummary, 1200); return; }
+  i++; timer = setTimeout(step, (crossIdx >= 0 && Math.abs(i - crossIdx) <= 1 ? 2600 : 1000) / speed);
+}
+$("play").onclick = () => { playing = !playing; $("play").textContent = playing ? "Pause" : "Play"; if (playing) step(); else clearTimeout(timer); };
+$("restart").onclick = () => location.reload();
+document.fonts.ready.then(() => setTimeout(step, +(q.get("delay") || 600)));
+</script>
+</body>
+</html>
