@@ -13,10 +13,10 @@ with sync_playwright() as p:
     ctx = b.new_context(viewport={"width": 1600, "height": 900}, device_scale_factor=1,
                         record_video_dir=out, record_video_size={"width": 1600, "height": 900}, color_scheme="dark")
     pg = ctx.new_page(); pg.goto(url)
-    shots = {"prepare": "Prepare", "move": "Move now", "flood": "River over the line"}
+    shots = {"prepare": "PREPARE sent", "move": "MOVE NOW sent", "flood": "passes 79.0 m"}
     for key, label in shots.items():
         try:
-            pg.wait_for_function(f"document.getElementById('statusLvl').textContent === {label!r}", timeout=240000)
+            pg.wait_for_function(f"document.getElementById('feed').textContent.includes({label!r}) || window.__replayDone", timeout=240000)
             pg.wait_for_timeout(900)
             pg.screenshot(path=os.path.join(out, f"{ev}-{key}.png"))
         except Exception as e: print("no", key, e)

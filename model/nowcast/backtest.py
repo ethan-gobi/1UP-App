@@ -8,6 +8,17 @@ HERE = os.path.dirname(__file__)
 LINE = 79.0
 RAIN = ["HY008_rain", "HY021_rain", "HY027_rain", "HY036_rain", "HY094_rain", "HY070_rain"]
 
+def load_all():
+    """TRCA open data (2015 to March 2021) followed by TRCA gauging-site exports (March 2021 on), 15-min, fixed EST."""
+    base = os.path.join(HERE, "..", "..", "data")
+    d = pd.read_csv(os.path.join(base, "don15.csv.gz"), index_col=0, parse_dates=True)
+    live = os.path.join(base, "don15_live.csv.gz")
+    if os.path.exists(live):
+        l = pd.read_csv(live, index_col=0, parse_dates=True)
+        d = pd.concat([d[d.index < l.index.min()], l]).sort_index()
+        d = d[~d.index.duplicated()].asfreq("15min")
+    return d
+
 def features(d):
     f = pd.DataFrame(index=d.index)
     rain = d[[c for c in RAIN if c in d]].mean(axis=1, skipna=True).fillna(0)
@@ -71,10 +82,11 @@ def tune(rule, grid, f, h, ev, years, fa_budget):
     return best
 
 if __name__ == "__main__":
-    d = pd.read_csv(os.path.join(HERE, "..", "..", "data", "don15.csv.gz"), index_col=0, parse_dates=True)
+    d = load_all()
     f, h = features(d), d["HY019_stage"]
     ev = events(h)
-    train, test = [2015, 2016, 2017, 2018], [2019, 2020, 2021]
+    train = [2015, 2016, 2017, 2018]
+    test = sorted({y for y in d.index.year if y >= 2019 and d.loc[str(y), "HY019_stage"].notna().mean() > 0.5})
     out = {"line": LINE, "train": train, "test": test, "events": [str(t) for t in ev]}
     tiers = {
         "prepare": (prepare_rule, {"r1": [8, 10, 12, 15, 18], "r3": [15, 18, 22, 26, 30], "wet": [0, 0.5, 1]}, 4),

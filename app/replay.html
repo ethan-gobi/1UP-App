@@ -155,7 +155,7 @@ const EVENTS = {
     title: "16 July 2024 storm · held out, never used to tune the rule",
     msgs: [
       { t: "start", who: "TRCA", text: "Watershed Conditions Statement (issued 15 July): heavy rain possible." },
-      { t: "09:35", who: "TRCA", text: "Flood Watch issued for the Don River." },
+      { t: "09:35", who: "TRCA", text: "Flood Watch issued for the Don River.", prepare: true },
       { t: "11:35", who: "TRCA", text: "Flood Warning issued. TRCA phones the Brick Works." },
     ],
     note: "Weather forecasts the day before called for 4 to 7 mm. About 51 mm fell. Nobody, including Flood Desk, could have known at breakfast.",
@@ -219,10 +219,16 @@ function addMsg(time, who, text, cls = "") {
   const m = document.createElement("div"); m.className = "msg " + cls;
   m.innerHTML = `<b>${time}</b><div><strong>${who}</strong> <span>${text}</span></div>`;
   feed.prepend(m);
+  while (feed.children.length > 4) feed.lastChild.remove();
 }
 const tasksEl = $("tasks");
 TASKS.forEach((t) => { const d = document.createElement("div"); d.className = "task " + (t.tier === "move" ? "mv" : ""); d.innerHTML = `<i class="box"></i><span class="who">${t.who}</span><span>${t.text}<span class="due"></span></span>`; tasksEl.appendChild(d); t.el = d; });
-const pI = firstIdx("prepare"), mI = firstIdx("move");
+// Prepare starts at whichever comes first: TRCA's Flood Watch (Flood Desk reads TRCA's public messages) or the rain rule.
+const rainI = firstIdx("prepare"), mI = firstIdx("move");
+const trig = EV.msgs.find((m) => m.prepare);
+const watchI = trig ? R.findIndex((r) => fmtT(r.t) >= trig.t) : -1;
+const pI = [rainI, watchI].filter((v) => v >= 0).reduce((a, b) => Math.min(a, b), Infinity) === Infinity ? -1 : Math.min(...[rainI, watchI].filter((v) => v >= 0));
+const fromWatch = watchI >= 0 && pI === watchI;
 const addMin = (s, m) => { const d = new Date(s + ":00"); d.setMinutes(d.getMinutes() + m); return d.toTimeString().slice(0, 5); };
 
 function render() {
@@ -256,16 +262,17 @@ function render() {
     st.dataset.l = level; st.classList.remove("pulse"); void st.offsetWidth; st.classList.add("pulse");
     const txt = {
       normal: ["Normal", "Routine day. Nothing to do."],
-      prepare: ["Prepare", `Heavy rain on the Don watershed gauges: ${r.r1h?.toFixed(0)} mm in the last hour. Get ready to move.`],
+      prepare: ["Prepare", fromWatch ? "TRCA issued a Flood Watch for the Don. Flood Desk turned it into the site checklist." : `Heavy rain on the Don watershed gauges: ${r.r1h?.toFixed(0)} mm in the last hour. Get ready to move.`],
       move: ["Move now", "The river is climbing fast toward the flood line. Clear the valley floor."],
       flood: ["River over the line", "The Don is over 79.0 m. Valley closed, everyone is up the hill."],
       falling: ["River falling", "Back under the line. Stay closed until TRCA lifts its message and staff inspect the floor."],
     }[level];
     $("statusLvl").textContent = txt[0]; $("statusTxt").textContent = txt[1];
-    if (level === "prepare") { addMsg(fmtT(r.t), "Flood Desk", "PREPARE sent to Maya, Aisha and Marcus.", "fd"); mark(i, "var(--prepare)", "Prepare"); }
-    if (level === "move") { addMsg(fmtT(r.t), "Flood Desk", "MOVE NOW sent. Clear the valley floor.", "fd mv"); mark(i, "var(--move)", "Move now"); }
-    if (level === "flood") { addMsg(fmtT(r.t), "River", "Don at Todmorden passes 79.0 m.", "rv"); mark(i, "var(--flood)", "Over 79.0 m"); }
+    if (level === "prepare") { addMsg(fmtT(r.t), "Flood Desk", fromWatch ? "TRCA Watch → PREPARE sent to Maya, Aisha and Marcus." : "PREPARE sent to Maya, Aisha and Marcus.", "fd"); mark(i, "var(--prepare)", "Prepare"); }
+    if ((level === "move" || level === "flood") && mI >= 0 && i >= mI && !said.move) { said.move = true; addMsg(fmtT(r.t), "Flood Desk", "MOVE NOW sent. Clear the valley floor.", "fd mv"); mark(i, "var(--move)", "Move now"); }
+    if (level === "flood" && !said.flood) { said.flood = true; addMsg(fmtT(r.t), "River", "Don at Todmorden passes 79.0 m.", "rv"); mark(i, "var(--flood)", "Over 79.0 m"); }
   }
+  if (fromWatch && i === rainI) addMsg(fmtT(r.t), "Flood Desk", `Rain gauges confirm: ${r.r1h?.toFixed(0)} mm in the last hour across the Don watershed.`, "fd");
   // tasks light up when their tier fires, and tick off on schedule
   for (const t of TASKS) {
     const at = t.tier === "prepare" ? pI : mI;
@@ -275,7 +282,7 @@ function render() {
     if (i >= at + Math.max(1, t.lag / 15 + 1)) t.el.classList.add("done");
   }
 }
-let markRow = 0;
+let markRow = 0; const said = {};
 function mark(k, color, label) {
   el("line", { class: "mark", x1: x(k), x2: x(k), y1: T, y2: RB, stroke: color }, marks);
   el("text", { x: x(k) + 6, y: T + 14 + 18 * markRow++, style: `fill:${color};font-weight:800;font-size:13px` }, marks).textContent = `${label} ${fmtT(R[k].t)}`;
@@ -287,9 +294,9 @@ function showSummary() {
   $("sumSub").textContent = EV.note;
   if (!EV.msgs.length) $("sumH").textContent = "The river gives minutes. Flood Desk turns them into a plan.";
   $("stats").innerHTML = [
-    [lp != null ? `${lp} min` : "–", "from Flood Desk's Prepare alert to the river crossing 79.0 m"],
-    [lm != null ? `${lm} min` : "–", "from Move now to the river crossing 79.0 m"],
-    [crossIdx >= 0 ? fmtT(R[crossIdx].t) : "–", "river passes the flood line" + (watch ? " (TRCA Flood Watch was at 09:35)" : "")],
+    [lp != null ? `${lp} min` : "–", fromWatch ? "from TRCA's Flood Watch, turned into the site checklist, to the river crossing 79.0 m" : "from Flood Desk's Prepare alert to the river crossing 79.0 m"],
+    lm != null && lm > 0 ? [`${lm} min`, "from Move now to the river crossing 79.0 m"] : [rainI >= 0 ? fmtT(R[rainI].t) : "–", "Flood Desk's own rain gauges confirm Prepare, even without TRCA"],
+    [crossIdx >= 0 ? fmtT(R[crossIdx].t) : "–", "river passes the flood line" + (watch ? ". TRCA Flood Warning followed at 11:35" : "")],
   ].map(([a, b]) => `<div><strong>${a}</strong><span>${b}</span></div>`).join("");
   $("sumFine").textContent = "Backtest on TRCA open data: see model/nowcast/README.md for every storm, the misses and the false alarms.";
   $("summary").classList.add("show");
