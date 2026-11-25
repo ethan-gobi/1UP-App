@@ -57,21 +57,28 @@ async function loadLive() {
 }
 
 async function loadReplay() {
-  // 16 July 2024: about 100 mm fell on Toronto and the Garden Market flooded. Days after the 15th play as "forecast".
+  // 16 July 2024: about 51 mm fell on the Don watershed (more downtown) and the Brick Works flooded. Days from the 16th play as "forecast".
   const today = "2024-07-16", from = "2024-06-05", to = "2024-07-22";
   const vars = "relative_humidity_2m,precipitation,temperature_2m,surface_pressure,snow_depth";
   const [wx, rain] = await Promise.all([
     getJSON(`https://archive-api.open-meteo.com/v1/archive?latitude=${LAT}&longitude=${LON}&start_date=${from}&end_date=${to}&hourly=${vars}&timezone=${encodeURIComponent(TZ)}`),
     stationRain(from, to),
   ]);
-  // In the replay the storm day's rain is what the gauges measured, as a good forecast would have shown it.
-  return { today, nowKey: "2024-07-16T08:00", H: wx.hourly, rain, series: [], live: false };
+  // No hindsight: from the storm day on, use the forecast that was actually issued the day before
+  // (Open-Meteo previous-runs archive), not the rain that fell. It called for under 10 mm; about 51 mm fell.
+  const fc = await getJSON(`https://previous-runs-api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&start_date=${today}&end_date=${to}&hourly=${vars.split(",").map((v) => v + "_previous_day1").join(",")}&timezone=${encodeURIComponent(TZ)}`);
+  const H = wx.hourly;
+  fc.hourly.time.forEach((t, j) => {
+    const i = H.time.indexOf(t); if (i < 0) return;
+    for (const v of vars.split(",")) { const x = fc.hourly[v + "_previous_day1"]?.[j]; if (x != null) H[v][i] = x; }
+  });
+  return { today, nowKey: "2024-07-16T08:00", H, rain, series: [], live: false };
 }
 
 function assemble(raw) {
   const { today } = raw;
   const observedRain = {};
-  for (const [d, v] of Object.entries(raw.rain)) if (d < today || !raw.live) observedRain[d] = v;
+  for (const [d, v] of Object.entries(raw.rain)) if (d < today) observedRain[d] = v;
   const flowByDay = {};
   for (const x of raw.series) (flowByDay[ymd(x.t)] ||= []).push(x.q);
   const flow = Object.fromEntries(Object.entries(flowByDay).filter(([, v]) => v.length >= 200).map(([d, v]) => [d, v.reduce((a, b) => a + b, 0) / v.length]));
@@ -116,7 +123,7 @@ function render() {
   const D = S.data; if (!D) return;
   S.level = currentLevel(D);
   renderForecast(D); renderTasks(D); renderModel(D); pickup.update(S.level, S.role);
-  const when = D.live ? `Updated ${new Date().toLocaleTimeString("en-CA", { hour: "numeric", minute: "2-digit", timeZone: TZ })} Toronto time` : "Replay of 16 July 2024 · real archived data";
+  const when = D.live ? `Updated ${new Date().toLocaleTimeString("en-CA", { hour: "numeric", minute: "2-digit", timeZone: TZ })} Toronto time` : "Replay: 16 July 2024 at 8 am, with the forecast issued the day before (no hindsight)";
   $("asOf").textContent = when;
 }
 
@@ -184,7 +191,7 @@ function renderForecast(D) {
     lineChart($("gaugeChart"), D.series.filter((x) => x.t > Date.now() - 7 * 864e5).map((x) => [x.t.getTime(), x.q]), { thr: HIGH_WATER, thrLabel: "High-water line" });
   } else {
     $("flowNow").textContent = "–"; $("gaugeTag").textContent = D.live ? "Offline" : "Replay";
-    $("flowSub").textContent = D.live ? "The live gauge did not answer. The forecast still works without it." : "Live gauge readings are only kept for 30 days, so the replay shows the weather side only.";
+    $("flowSub").textContent = D.live ? "The live gauge did not answer. The forecast still works without it." : "This daily view only had the day-before forecast. Open the minute-by-minute storm replay to see the river gauges.";
     $("gaugeChart").innerHTML = "";
   }
 

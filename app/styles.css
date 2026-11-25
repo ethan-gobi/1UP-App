@@ -418,3 +418,4 @@ h3{font-weight:800;font-size:17px}
   .speech{margin-right:56px}
 }
 @media (prefers-reduced-motion:reduce){.bubble,.drip{animation:none!important}}
+a.btn{text-decoration:none;color:inherit}
