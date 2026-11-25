@@ -348,6 +348,7 @@ function mark(k, color, label) {
   el("line", { class: "mark", x1: x(k), x2: x(k), y1: T, y2: RB, stroke: color }, marks);
   el("text", { x: x(k) + 6, y: T + 14 + 18 * markRow++, style: `fill:${color};font-weight:800;font-size:13px` }, marks).textContent = `${label} ${fmtT(R[k].t)}`;
 }
+window.__summary = () => showSummary();
 function showSummary() {
   const mins = (a, b) => (a >= 0 && b >= 0 ? (b - a) * 15 : null);
   const lp = mins(pI, crossIdx), lm = mins(mI, crossIdx);
