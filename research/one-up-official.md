@@ -244,25 +244,25 @@ Slide 2 · 0:20 to 0:50
 
 #### What happened at Brick Works
 
-The 1UP brief says the Garden Market lost thousands of dollars in inventory in the 2023 flood. The following summer, Evergreen sounded its evacuation alarm at eleven thirty. By about noon, water was rushing onto the site. That half hour was already for getting people out. So we moved our decision earlier, before the market opens. At an evacuation, everybody leaves the packets behind.
+On July 16, 2024, the Garden Market suffered considerable inventory losses. Evergreen hasn’t published a dollar total. TRCA had a Water Safety statement in force from the previous day. It issued a Flood Watch at 9:35 and a Flood Warning at 11:35, and it contacted Brick Works directly. From 9 a.m. to noon, the federal gauge at Todmorden recorded a 2.60-metre rise in the Don. That gives us a reason to change what is on the counter before conditions worsen.
 
 Slide 3 · 0:50 to 1:25
 
 #### What a Watch can tell us
 
-Ethan’s model learns from fourteen weather inputs, including station rainfall. It estimates whether the Don at Todmorden will average twenty cubic metres per second or more today or tomorrow. In the years held back for testing, Watch flagged sixteen of twenty high-water events a day ahead. It also produced about thirteen false-alarm days per year. That test assumed we knew the rain that would actually fall. It tells us the idea is worth comparing with the warnings staff already receive.
+Our model uses fourteen weather inputs to estimate whether daily average flow at Todmorden reaches twenty cubic metres per second today or tomorrow. In the historical test, it flagged sixteen of twenty high-water events a day ahead and averaged thirteen false-alarm days a year. That test used rain that actually fell the next day. The forecasts available ahead of July 16 underestimated the rain. We use July to show how staff could use a checklist alongside TRCA. We still need to test what the model adds.
 
 Slide 4 · 1:25 to 2:00
 
 #### The opening decision
 
-Maya checks official warnings, the separate live gauge and conditions at the site. If staff choose the Watch display, Aisha puts out a sample of each variety and fills orders from stock kept at a protected, accessible spot that staff approve. Visitors can still browse without a phone. She explains the setup before opening. If staff call STOP, everyone leaves everything where it is. Nobody has to finish packing a stall.
+Before opening, Maya checks official alerts, our model, the river gauge and conditions on site. Staff decide whether to open, adjust the display or close. If they open with samples, Aisha can show every variety while filling orders from a dry spot approved by staff. If that spot is unavailable, bring less stock. Visitors can browse without a phone. At the opening briefing, Maya names the visitor guide and tells the team which exit staff checked. Maya calls STOP. Everyone leaves the stock, and the guide directs visitors to that exit.
 
 Slide 5 · 2:00 to 2:35
 
 #### What the first stage costs
 
-We’re asking for two thousand four hundred twenty-two dollars and forty-six cents for the first stage. The largest part pays for a twelve-person shopping comparison, including the participants, observers and time to score it. Two hundred seventy dollars tests whether the model adds a useful decision. A smaller drill checks whether people hear STOP and find the first turn. We’ve included a ten percent buffer. Any later purchase needs a separate reason.
+Our request is two thousand four hundred twenty-two dollars and forty-six cents, including applicable tax. The largest part funds the shopper comparison, including twelve twenty-five-dollar honoraria. Two hundred seventy dollars covers the staff time for the alert comparison. Four hundred seventy-one dollars and thirty-nine cents covers the separate STOP and first-turn check. The remaining two hundred twenty dollars and twenty-two cents is contingency. The hundred-thousand-dollar competition ceiling leaves room for later options.
 
 Slide 6 · 2:35 to 3:30
 
@@ -274,13 +274,13 @@ Slide 7 · 3:30 to 4:20
 
 #### What does the model add?
 
-Take the same held-out market mornings and set the same decision time. First score what staff could have decided from official alerts. Then add the model signal using only forecasts issued by that time. Score both against the same observed high-water outcome, and record site impacts separately when available. Did the extra signal catch a morning the alerts missed? How early? How many extra quiet mornings would staff have changed the display? If timestamped archives are missing, record both options before opening from now on while normal operations continue. We can compare them when the outcomes are known.
+Every market morning, record what official alerts and site information would lead staff to do. Then record whether adding Flood Desk would change the setup. Use the same decision time and save the information available then. Log quiet mornings too: a flood on a quiet morning is a miss we need to count. Later compare the two decisions with what the river did and what happened at the market. A high river reading alone does not establish that the shop flooded. Staff keep control of actual operations.
 
 Slide 8 · 4:20 to 4:55
 
 #### What earns the next dollar?
 
-We want exposure at or below a quarter of the usual display, median service at most thirty seconds slower and nobody handling stock after STOP. We’ll also look for a drop in mock spending per browser. If shoppers avoid the display, we change it and test again. If official alerts already give the same useful notice, the extra model has to earn its cost. A case or more equipment only makes sense when the simpler trial shows what is missing.
+We want less stock exposed, a manageable wait and no handling after STOP. We also need to know whether the sample display makes shoppers walk away and whether the model helps enough to justify extra setup on dry days. If the simpler setup works every day, keep it. The fold-out pickup stand is a possible second phase only if the pilot supports it and a dry, accessible host agrees in writing.
 
 Slide 9 · 4:55 to 5:00
 
