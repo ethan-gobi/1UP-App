@@ -1,0 +1,28 @@
+Category,Item,Unit CAD,Qty,Amount CAD,HST applies
+Materials & equipment,"Cabinet/trolley shell, washable trays, hinged lid-counter and finish",1850.00,2,3700.00,yes
+Materials & equipment,"Legs, braces, latches, brakes, anti-tip and lock hardware",650.00,2,1300.00,yes
+Materials & equipment,"Pop-up 5 ft canopy with roller bag, sidewall and ballast (portable kit)",600.00,2,1200.00,yes
+Materials & equipment,Opening seed and book stock for the reserve unit,1500.00,1,1500.00,yes
+Materials & equipment,Card reader per stall,69.00,2,138.00,yes
+Research & trials,"Professional design, stability and accessibility review (hours)",150.00,24,3600.00,yes
+Research & trials,Paid prototype and pickup trial sessions (honoraria),30.00,16,480.00,no
+Research & trials,"Mock-up, test weights and measuring supplies",550.00,1,550.00,yes
+Outreach,"Closure signs at both sites, large-print QR cards, pickup sheets, flyers",1500.00,1,1500.00,yes
+Staffing,Fabricate two units including the first prototype (hours),72.00,100,7200.00,yes
+Staffing,"Coordinate host, stock rotation and four practice drills (hours)",55.00,80,4400.00,yes
+Staffing,"Open, staff and close the stall, 12 market days x 8 h",32.00,96,3072.00,yes
+Staffing,"Hinge, brake and brace inspection (hours)",72.00,12,864.00,yes
+Host & transport,"Copp Hall hire, 12 days x 8 h at the higher $200/h rate",200.00,96,19200.00,yes
+Host & transport,Dry storage and access retainer at the host (months),275.00,12,3300.00,yes
+Host & transport,Van deliveries and stock rotation (trips),180.00,12,2160.00,yes
+Host & transport,"Backup host 1, Yorkminster Park Baptist: 4 standby days x 8 h at $100/h",100.00,32,3200.00,yes
+Host & transport,"Backup host 2, Church of the Redeemer: 4 standby days x 8 h at $100/h (quote pending)",100.00,32,3200.00,yes
+Host & transport,"Backup hosts: site visits, accessibility check and agreement review",500.00,2,1000.00,yes
+Host & transport,Van trips to backup hosts,180.00,8,1440.00,yes
+Admin,Liability premium and host agreement review,2000.00,1,2000.00,yes
+Admin,Payment-processing fees on pilot sales,300.00,1,300.00,yes
+Tax,"HST allowance, 13% of taxable lines",,,8427.12,
+Contingency,10% of year-one lines plus HST,,,7373.11,
+Website,Domain and spare; hosting on a free tier (all-in cap),,,100.00,included
+Year-two reserve,Held for year-two market days; released only after the year-one review,,,18795.77,
+Total,,,,100000.00,
