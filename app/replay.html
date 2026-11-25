@@ -298,7 +298,7 @@ function showSummary() {
     lm != null && lm > 0 ? [`${lm} min`, "from Move now to the river crossing 79.0 m"] : [rainI >= 0 ? fmtT(R[rainI].t) : "–", "Flood Desk's own rain gauges confirm Prepare, even without TRCA"],
     [crossIdx >= 0 ? fmtT(R[crossIdx].t) : "–", "river passes the flood line" + (watch ? ". TRCA Flood Warning followed at 11:35" : "")],
   ].map(([a, b]) => `<div><strong>${a}</strong><span>${b}</span></div>`).join("");
-  $("sumFine").textContent = "Backtest on TRCA open data: see model/nowcast/README.md for every storm, the misses and the false alarms.";
+  $("sumFine").textContent = "Backtest 2019 to 2026, 25 river crossings: warned 24 at least 15 min ahead. Every storm, miss and false alarm is in model/nowcast/README.md.";
   $("summary").classList.add("show");
   window.__replayDone = true;
 }

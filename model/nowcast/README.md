@@ -22,7 +22,7 @@ The river passed 79.0 m **18 times** in that period (separate events at least 24
 ## How it was tested
 
 - Settings were chosen on **2015 to 2018** (11 crossings), with a false-alarm budget fixed in advance: at most 4 a year for Prepare and 2 a year for Move now.
-- Then scored once on **2019 to 2021** (7 crossings), which the tuning never saw.
+- Then scored on **2019 to 2026** (25 crossings), which the tuning never saw.
 - A false alarm is an alert that is not followed by a crossing within 6 hours.
 - Every input is delayed 15 minutes to mimic publishing.
 
@@ -69,7 +69,7 @@ The one miss is 17 February 2022, a winter snowmelt rise with little rain. Per c
 
 What this means in plain words:
 - The river gives **minutes, not hours**. Move now alone gives a median of 30 minutes; Prepare, from rain, adds about an hour more.
-- Together they warned 24 of 25 crossings at least 15 minutes ahead, with fewer false alarms than the simple 78.5 m rule, which gives similar coverage at 5.8 false alarms a year.
+- Together they warned 24 of 25 crossings at least 15 minutes ahead, with a median of 105 minutes. The simple 78.5 m rule covers 23 of 25 but with a median of only 45 minutes and 5.8 false alarms a year.
 - Prepare's false alarms rose from 1 a year (2019 to 2021) to 3.2 a year over 2019 to 2026. Heavy rain that doesn't flood the Don is common. That is why Prepare means "get ready", not "close".
 - 16 July 2024 counts in the same event as a smaller crossing the evening before (events closer than 24 h are merged). In the replay, TRCA's 09:35 Flood Watch starts the checklist; Flood Desk's rain rule confirms at 10:45; the river passes 79.0 m at 11:15.
 
